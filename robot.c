@@ -24,11 +24,11 @@ int Compare(Coordonnee c1, Coordonnee c2) {
  */
 bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante) {
 
-  // on commence par récupérer la tête de la liste
+  // on commence par récupérer la tête de la liste et on initialise le premier élement
   Element_liste_dynamique_generique *tmp;
   tmp = li->psTete;
 
-  // L'étape temporaire dans la liste
+  // L'étape temporaire dans la listed
   Etape *step_tmp;
 
   // utile pour comparer les coordonnées de l'étape courante avec celles de la liste
@@ -91,11 +91,7 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
   int cur_lin = etape_courante.coord.num_ligne;
 
   // coordonnées temporaire des cases adjacentes (<=> voisines)
-  Coordonnee coord_tmp /*= malloc(sizeof(Coordonnee))*/;
-
-  // étape temporaire qui sera ajouter à la liste si elle est validé
-  Etape * step_tmp = (Etape *) malloc(sizeof(Etape));
-
+  Coordonnee coord_tmp/*= malloc(sizeof(Coordonnee))*/;
 
   // case du dessus
   // TODO : demander POURQUOI ICI ÇA PASSE PAS AVEC UN -> ????????
@@ -106,11 +102,18 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
      && !Verif_Etape_Appartient_liste(etape_courante.chemin, etape_courante) // si on n'est pas déjà passé par cette case
    ) {
 
-     // TODO AJOUTER LA LISTE ... :
+     // étape temporaire qui sera ajouter à la liste si elle est validé
+     Etape * step_tmp = (Etape *) malloc(sizeof(Etape));
+
+     // On ajoute l'étape dans la liste des étapes suivantes
      step_tmp->coord.num_col = coord_tmp.num_col;
      step_tmp->coord.num_ligne = coord_tmp.num_ligne;
+     // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
+     Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
      step_tmp->chemin = etape_courante.chemin; // grave vérif
      step_tmp->suivant = NULL; // bouchon
+
+     Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &step_tmp, sizeof(Etape));
 
      nb_elem++; // Faire gaffe au pointeur, p'tetre ça marche pas là ?
    }
@@ -175,7 +178,7 @@ void Affiche_matrice(Problem *p) {
                 putchar('A');
             }else if( p->depart.num_ligne==i&&p->depart.num_col==j){
                 putchar('D');
-            }else{ 
+            }else{
                 printf("%c",p->carte[i][j]);
             }
         }
