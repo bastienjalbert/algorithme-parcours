@@ -72,7 +72,7 @@ bool evaluation(Coordonnee case_courante,Problem *problem) {
 
   if(cur_col < 0 || cur_col > problem->nb_colonne // si la case dépasse des bords
     || cur_lin < 0 || cur_lin > problem->nb_ligne // de la carte .... ou
-    || problem->carte[cur_lin][cur_col] != ' ' // si la case ne contient pas un espace
+    || problem->carte[cur_lin][cur_col] != ' ' // si la case est un mur
   ) {
     return false;
   }
@@ -128,13 +128,8 @@ void * Parcours_Larg(Etape etape_depart,
                        Liste_dynamique_generique etapes_suivantes,
                        int *nb_elem ),
                      bool evaluation(Coordonnee case_courante,Problem *problem)
-                   );
-
-
-void parcours_largeur(Problem * pb) {
-
-// TODO
-
+                 ) 
+{
 
 }
 

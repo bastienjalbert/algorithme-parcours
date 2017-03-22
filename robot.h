@@ -84,7 +84,7 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 // TODO argument probleme rajouter par rapport version de base
 // car besoin pour la vérification de la cases (validité de passage)
 // donc savoir si on doit utiliser ici evaluation (et donc passé problem en args)
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem , Problem * problem);
+int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem);
 
 bool evaluation(Coordonnee case_courante,Problem *problem);
 
