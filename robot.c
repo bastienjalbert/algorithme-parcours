@@ -84,7 +84,7 @@ bool evaluation(Coordonnee case_courante,Problem *problem) {
 /**
  * Récupére la liste des toutes les cases voisines visitables
  */
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem, Problem * problem) {
+int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem) {
 
   // coordonnées de la case (<=> étape) courante
   int cur_col = etape_courante.coord.num_col;
@@ -98,9 +98,8 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
   coord_tmp.num_ligne = cur_lin - 1;
   coord_tmp.num_col = cur_col;
 
-  if(evaluation(coord_tmp, problem) // si la case est "physiquement" franchissable
-     && !Verif_Etape_Appartient_liste(etape_courante.chemin, etape_courante) // si on n'est pas déjà passé par cette case
-   ) {
+  if(!Verif_Etape_Appartient_liste(etape_courante.chemin, etape_courante)) // si on n'est pas déjà passé par cette case
+    {
 
      // étape temporaire qui sera ajouter à la liste si elle est validé
      Etape * step_tmp = (Etape *) malloc(sizeof(Etape));
@@ -128,7 +127,7 @@ void * Parcours_Larg(Etape etape_depart,
                        Liste_dynamique_generique etapes_suivantes,
                        int *nb_elem ),
                      bool evaluation(Coordonnee case_courante,Problem *problem)
-                 ) 
+                 )
 {
 
 }

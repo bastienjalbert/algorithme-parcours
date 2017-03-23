@@ -37,11 +37,13 @@ int main() {
         arrivee->coord = probleme.arrive;
         arrivee->chemin = NULL;
 
-        Parcours_Larg(*depart,
+        int es = etat_suivants(*depart, *cases_traitement, &nb_elem);
+        bool *eval = malloc(1024);
+        *eval = evaluation(probleme.depart,&probleme);
+
+        *Parcours_Larg(*depart,
                              *arrivee,
-                             etat_suivants(*depart, *cases_traitement, nb_elem),
-                             evaluation(probleme.depart,&probleme)
-                             );
+                             (int)es, eval);
         libere_matrice(&probleme);
         }
     return 0;
