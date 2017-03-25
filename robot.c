@@ -6,8 +6,7 @@
 
 
 // comparer deux coordonnées
-// @return : 0 si elles sont égales, puis
-//           TODO : les autres retours ?
+// @return : 0 si elles sont égales
 int Compare(Coordonnee c1, Coordonnee c2) {
 
     if(c1.num_col == c2.num_col &&
@@ -28,7 +27,7 @@ bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_co
   Element_liste_dynamique_generique *tmp;
   tmp = li->psTete;
 
-  // L'étape temporaire dans la listed
+  // L'étape temporaire dans la liste
   Etape *step_tmp;
 
   // utile pour comparer les coordonnées de l'étape courante avec celles de la liste
@@ -84,51 +83,77 @@ bool evaluation(Coordonnee case_courante,Problem *problem) {
 /**
  * Récupére la liste des toutes les cases voisines visitables
  */
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem) {
+int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes) {
 
   // coordonnées de la case (<=> étape) courante
   int cur_col = etape_courante.coord.num_col;
   int cur_lin = etape_courante.coord.num_ligne;
 
   // coordonnées temporaire des cases adjacentes (<=> voisines)
-  Coordonnee coord_tmp/*= malloc(sizeof(Coordonnee))*/;
+  Etape *haut = malloc(sizeof(Etape));
+  Etape *bas = malloc(sizeof(Etape));
+  Etape *gauche = malloc(sizeof(Etape));
+  Etape *droite = malloc(sizeof(Etape));
 
   // case du dessus
-  // TODO : demander POURQUOI ICI ÇA PASSE PAS AVEC UN -> ????????
-  coord_tmp.num_ligne = cur_lin - 1;
-  coord_tmp.num_col = cur_col;
+  haut->coord.num_ligne = cur_lin - 1;
+  haut->coord.num_col = cur_col;
 
-  if(!Verif_Etape_Appartient_liste(etape_courante.chemin, etape_courante)) // si on n'est pas déjà passé par cette case
-    {
+  // case du dessous
+  bas->coord.num_ligne = cur_lin + 1;
+  bas->coord.num_col = cur_col;
 
-     // étape temporaire qui sera ajouter à la liste si elle est validé
-     Etape * step_tmp = (Etape *) malloc(sizeof(Etape));
+  // case à gauche
+  gauche->coord.num_ligne = cur_lin;
+  gauche->coord.num_col = cur_col - 1;
 
-     // On ajoute l'étape dans la liste des étapes suivantes
-     step_tmp->coord.num_col = coord_tmp.num_col;
-     step_tmp->coord.num_ligne = coord_tmp.num_ligne;
-     // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
-     Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
-     step_tmp->chemin = etape_courante.chemin; // grave vérif
-     step_tmp->suivant = NULL; // bouchon
+  // case à droite
+  droite->coord.num_ligne = cur_lin;
+  droite->coord.num_col = cur_col + 1;
 
-     Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &step_tmp, sizeof(Etape));
+  // Liste des cases autours
+  Etape etapes[5] = {*haut, *bas, *gauche, *droite};
 
-     nb_elem++; // Faire gaffe au pointeur, p'tetre ça marche pas là ?
-   }
+  for (int i = 0; i < sizeof(etapes); i++)
+  {
+    if(!Verif_Etape_Appartient_liste(etape_courante.chemin, etapes[i])) // si on n'est pas déjà passé par cette case
+      {
+
+       // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
+       Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
+       etapes[i].chemin = etape_courante.chemin; // grave vérif
+       etapes[i].suivant = NULL; // bouchon
+
+       Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &etapes[i], sizeof(Etape));
+
+     }
+  }
 
 }
 
 
 // TODO savoir pk un pointeur et comment marche cette méthode
-void * Parcours_Larg(Etape etape_depart,
-                     Etape etape_arrivee,
-                     int etat_suivants(Etape etape_courante,
-                       Liste_dynamique_generique etapes_suivantes,
-                       int *nb_elem ),
-                     bool evaluation(Coordonnee case_courante,Problem *problem)
-                 )
+void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee,
+                     bool evaluation(Coordonnee case_courante,Problem *problem), Problem *problem)
 {
+
+  if (etape_courante.coord.num_col == coord_arrivee.num_col
+   && etape_courante.coord.num_ligne == coord_arrivee.num_ligne) {
+     printf("Vous êtes à l'arrivée");
+   } else {
+
+     // On récupère une liste avec tous les prochaines étapes
+     Liste_dynamique_generique etapes_suivantes;
+     Creer_liste_dynamique_generique(&etapes_suivantes);
+     etat_suivants(etape_courante, etapes_suivantes);
+
+     while(Taille_liste_dynamique(&etapes_suivantes) > 0)
+     {
+       Etape prochaine_etape;
+       Enlever_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));
+       Parcours_Larg(prochaine_etape, coord_arrivee, evaluation(prochaine_etape.coord,problem), problem);
+     }
+   }
 
 }
 

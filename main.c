@@ -15,35 +15,19 @@ int main() {
         }
     else {
         Problem probleme;
-        // cases traitées
-        Liste_dynamique_generique *cases_traitement = malloc(1024);
         // cases marquées
-        Liste_dynamique_generique *cases_marquees = malloc(1024);
+        Liste_dynamique_generique *cases_marquees;
+        Creer_liste_dynamique_generique(cases_marquees);
 
         Etape *depart = malloc(sizeof(Etape));
-        Etape *arrivee = malloc(sizeof(Etape));
-
-        int nb_elem = 5;
 
         lire_fichier(file,&probleme);
         Affiche_matrice(&probleme);
 
-        // On ajoute la case de départ dans nos deux listes
-        Ajouter_elem_tete_liste_dynamique_generique(cases_traitement, &probleme.depart, sizeof(probleme.depart));
-        Ajouter_elem_tete_liste_dynamique_generique(cases_marquees, &probleme.depart, sizeof(probleme.depart));
-
         depart->coord = probleme.depart;
-        depart->chemin = NULL;
-        arrivee->coord = probleme.arrive;
-        arrivee->chemin = NULL;
+        depart->chemin = cases_marquees;
 
-        int es = etat_suivants(*depart, *cases_traitement, &nb_elem);
-        bool *eval = malloc(1024);
-        *eval = evaluation(probleme.depart,&probleme);
-
-        *Parcours_Larg(*depart,
-                             *arrivee,
-                             (int)es, eval);
+        Parcours_Larg(*depart,probleme.arrive, true, &probleme);
         libere_matrice(&probleme);
         }
     return 0;
