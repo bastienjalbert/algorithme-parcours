@@ -5,9 +5,9 @@
 #include <stdbool.h>
 
 /**
- * structure de coordonn�es
- *      num_ligne: le num�ro de la ligne
- *      num_col: le num�ro de la colonne
+ * structure de coordonnées
+ *      num_ligne: le numéro de la ligne
+ *      num_col: le numéro de la colonne
  */
 
 typedef struct coordonnee {
@@ -15,7 +15,7 @@ typedef struct coordonnee {
     } Coordonnee;
 
 /**
- * permet de repr�senter une carte
+ * permet de représenter une carte
  *      nom: le nom de la carte
  *      arrive: le point d'arrive de la carte
  *      depart: le point de depart de la carte
@@ -31,7 +31,7 @@ typedef struct problem {
     } Problem;
 
 /**
- * permet de d�finir une etape de la recherche
+ * permet de définir une etape de la recherche
  *      coord: La position de l etape
  *      chemin: la liste des positions precedentes
  */
@@ -84,7 +84,7 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 // TODO argument probleme rajouter par rapport version de base
 // car besoin pour la vérification de la cases (validité de passage)
 // donc savoir si on doit utiliser ici evaluation (et donc passé problem en args)
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem , Problem * problem);
+int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, Problem *problem);
 
 bool evaluation(Coordonnee case_courante,Problem *problem);
 
@@ -96,10 +96,6 @@ void afficher_etape(Etape etape_courante);
 
 bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante);
 
-void * Parcours_Larg(Etape etape_depart,
-                     Etape etape_arrivee,
-                     int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem ),
-                     bool evaluation(Coordonnee case_courante,Problem *problem)
-                     );
+void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem);
 
 #endif // ROBOT_H_INCLUDED

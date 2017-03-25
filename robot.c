@@ -6,8 +6,7 @@
 
 
 // comparer deux coordonnées
-// @return : 0 si elles sont égales, puis
-//           TODO : les autres retours ?
+// @return : 0 si elles sont égales
 int Compare(Coordonnee c1, Coordonnee c2) {
 
     if(c1.num_col == c2.num_col &&
@@ -28,7 +27,7 @@ bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_co
   Element_liste_dynamique_generique *tmp;
   tmp = li->psTete;
 
-  // L'étape temporaire dans la listed
+  // L'étape temporaire dans la liste
   Etape *step_tmp;
 
   // utile pour comparer les coordonnées de l'étape courante avec celles de la liste
@@ -72,7 +71,7 @@ bool evaluation(Coordonnee case_courante,Problem *problem) {
 
   if(cur_col < 0 || cur_col > problem->nb_colonne // si la case dépasse des bords
     || cur_lin < 0 || cur_lin > problem->nb_ligne // de la carte .... ou
-    || problem->carte[cur_lin][cur_col] != ' ' // si la case ne contient pas un espace
+    || problem->carte[cur_lin][cur_col] != ' ' // si la case est un mur
   ) {
     return false;
   }
@@ -84,57 +83,84 @@ bool evaluation(Coordonnee case_courante,Problem *problem) {
 /**
  * Récupére la liste des toutes les cases voisines visitables
  */
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, int *nb_elem, Problem * problem) {
+int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, Problem *probleme) {
 
   // coordonnées de la case (<=> étape) courante
   int cur_col = etape_courante.coord.num_col;
   int cur_lin = etape_courante.coord.num_ligne;
 
   // coordonnées temporaire des cases adjacentes (<=> voisines)
-  Coordonnee coord_tmp/*= malloc(sizeof(Coordonnee))*/;
+  Etape *haut = malloc(sizeof(Etape));
+  Etape *bas = malloc(sizeof(Etape));
+  Etape *gauche = malloc(sizeof(Etape));
+  Etape *droite = malloc(sizeof(Etape));
 
   // case du dessus
-  // TODO : demander POURQUOI ICI ÇA PASSE PAS AVEC UN -> ????????
-  coord_tmp.num_ligne = cur_lin - 1;
-  coord_tmp.num_col = cur_col;
+  haut->coord.num_ligne = cur_lin - 1;
+  haut->coord.num_col = cur_col;
 
-  if(evaluation(coord_tmp, problem) // si la case est "physiquement" franchissable
-     && !Verif_Etape_Appartient_liste(etape_courante.chemin, etape_courante) // si on n'est pas déjà passé par cette case
-   ) {
+  // case du dessous
+  bas->coord.num_ligne = cur_lin + 1;
+  bas->coord.num_col = cur_col;
 
-     // étape temporaire qui sera ajouter à la liste si elle est validé
-     Etape * step_tmp = (Etape *) malloc(sizeof(Etape));
+  // case à gauche
+  gauche->coord.num_ligne = cur_lin;
+  gauche->coord.num_col = cur_col - 1;
 
-     // On ajoute l'étape dans la liste des étapes suivantes
-     step_tmp->coord.num_col = coord_tmp.num_col;
-     step_tmp->coord.num_ligne = coord_tmp.num_ligne;
-     // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
-     Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
-     step_tmp->chemin = etape_courante.chemin; // grave vérif
-     step_tmp->suivant = NULL; // bouchon
+  // case à droite
+  droite->coord.num_ligne = cur_lin;
+  droite->coord.num_col = cur_col + 1;
 
-     Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &step_tmp, sizeof(Etape));
+  // Liste des cases autours
+  Liste_dynamique_generique *etapes;
+  Creer_liste_dynamique_generique(etapes);
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, haut, sizeof(Etape));
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, bas, sizeof(Etape));
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, gauche, sizeof(Etape));
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, droite, sizeof(Etape));
 
-     nb_elem++; // Faire gaffe au pointeur, p'tetre ça marche pas là ?
-   }
+  while(Taille_liste_dynamique_generique(&etapes_suivantes) > 0)
+  {
+    Etape prochaine_etape;
+    Enlever_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));;
+
+    if(evaluation(prochaine_etape.coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, prochaine_etape)) // si on n'est pas déjà passé par cette case
+      {
+
+       // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
+       Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
+       prochaine_etape.chemin = etape_courante.chemin; // grave vérif
+       prochaine_etape.suivant = NULL; // bouchon
+
+       Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));
+
+     }
+  }
 
 }
 
 
 // TODO savoir pk un pointeur et comment marche cette méthode
-void * Parcours_Larg(Etape etape_depart,
-                     Etape etape_arrivee,
-                     int etat_suivants(Etape etape_courante,
-                       Liste_dynamique_generique etapes_suivantes,
-                       int *nb_elem ),
-                     bool evaluation(Coordonnee case_courante,Problem *problem)
-                   );
+void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem)
+{
+  printf("col : %d | ligne : %d\n", etape_courante.coord.num_col, etape_courante.coord.num_ligne);
+  if (etape_courante.coord.num_col == coord_arrivee.num_col
+   && etape_courante.coord.num_ligne == coord_arrivee.num_ligne) {
+     printf("Vous êtes à l'arrivée");
+   } else {
 
+     // On récupère une liste avec tous les prochaines étapes
+     Liste_dynamique_generique etapes_suivantes;
+     Creer_liste_dynamique_generique(&etapes_suivantes);
+     etat_suivants(etape_courante, etapes_suivantes, problem);
 
-void parcours_largeur(Problem * pb) {
-
-// TODO
-
+     while(Taille_liste_dynamique_generique(&etapes_suivantes) > 0)
+     {
+       Etape prochaine_etape;
+       Enlever_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));
+       Parcours_Larg(prochaine_etape, coord_arrivee, problem);
+     }
+   }
 
 }
 
@@ -148,7 +174,7 @@ void lire_fichier(FILE *f, Problem *p) {
     fscanf(f,"%i\n",&p->nb_colonne);
     p->carte = (char **) malloc(sizeof(char *)*p->nb_ligne);
     if(p->carte==NULL) {
-        printf("\nallocation impossible, pas assez de m�moire\n");
+        printf("\nallocation impossible, pas assez de mémoire\n");
         exit (1);
     } else {
         for (int i = 0; i < p->nb_ligne; i++) {
