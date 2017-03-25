@@ -27,7 +27,7 @@ int main() {
         depart->coord = probleme.depart;
         depart->chemin = cases_marquees;
 
-        Parcours_Larg(*depart,probleme.arrive, true, &probleme);
+        Parcours_Larg(*depart,probleme.arrive, &probleme);
         libere_matrice(&probleme);
         }
     return 0;

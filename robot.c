@@ -83,7 +83,7 @@ bool evaluation(Coordonnee case_courante,Problem *problem) {
 /**
  * Récupére la liste des toutes les cases voisines visitables
  */
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes) {
+int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, Problem *probleme) {
 
   // coordonnées de la case (<=> étape) courante
   int cur_col = etape_courante.coord.num_col;
@@ -116,7 +116,7 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
 
   for (int i = 0; i < sizeof(etapes); i++)
   {
-    if(!Verif_Etape_Appartient_liste(etape_courante.chemin, etapes[i])) // si on n'est pas déjà passé par cette case
+    if(evaluation(etapes[i].coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, etapes[i])) // si on n'est pas déjà passé par cette case
       {
 
        // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
@@ -133,8 +133,7 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
 
 
 // TODO savoir pk un pointeur et comment marche cette méthode
-void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee,
-                     bool evaluation(Coordonnee case_courante,Problem *problem), Problem *problem)
+void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem)
 {
 
   if (etape_courante.coord.num_col == coord_arrivee.num_col
@@ -145,13 +144,13 @@ void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee,
      // On récupère une liste avec tous les prochaines étapes
      Liste_dynamique_generique etapes_suivantes;
      Creer_liste_dynamique_generique(&etapes_suivantes);
-     etat_suivants(etape_courante, etapes_suivantes);
+     etat_suivants(etape_courante, etapes_suivantes, problem);
 
      while(Taille_liste_dynamique(&etapes_suivantes) > 0)
      {
        Etape prochaine_etape;
        Enlever_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));
-       Parcours_Larg(prochaine_etape, coord_arrivee, evaluation(prochaine_etape.coord,problem), problem);
+       Parcours_Larg(prochaine_etape, coord_arrivee, problem);
      }
    }
 
