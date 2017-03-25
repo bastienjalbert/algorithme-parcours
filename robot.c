@@ -112,19 +112,27 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
   droite->coord.num_col = cur_col + 1;
 
   // Liste des cases autours
-  Etape etapes[5] = {*haut, *bas, *gauche, *droite};
+  Liste_dynamique_generique *etapes;
+  Creer_liste_dynamique_generique(etapes);
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, haut, sizeof(Etape));
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, bas, sizeof(Etape));
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, gauche, sizeof(Etape));
+  Ajouter_elem_tete_liste_dynamique_generique(etapes, droite, sizeof(Etape));
 
-  for (int i = 0; i < sizeof(etapes); i++)
+  while(Taille_liste_dynamique_generique(&etapes_suivantes) > 0)
   {
-    if(evaluation(etapes[i].coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, etapes[i])) // si on n'est pas déjà passé par cette case
+    Etape prochaine_etape;
+    Enlever_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));;
+
+    if(evaluation(prochaine_etape.coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, prochaine_etape)) // si on n'est pas déjà passé par cette case
       {
 
        // on ajoute au chemin l'étape actuelle pour l'enregistre dans la prochaine Etape
        Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
-       etapes[i].chemin = etape_courante.chemin; // grave vérif
-       etapes[i].suivant = NULL; // bouchon
+       prochaine_etape.chemin = etape_courante.chemin; // grave vérif
+       prochaine_etape.suivant = NULL; // bouchon
 
-       Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &etapes[i], sizeof(Etape));
+       Ajouter_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));
 
      }
   }
@@ -135,7 +143,7 @@ int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivant
 // TODO savoir pk un pointeur et comment marche cette méthode
 void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem)
 {
-
+  printf("col : %d | ligne : %d\n", etape_courante.coord.num_col, etape_courante.coord.num_ligne);
   if (etape_courante.coord.num_col == coord_arrivee.num_col
    && etape_courante.coord.num_ligne == coord_arrivee.num_ligne) {
      printf("Vous êtes à l'arrivée");
@@ -146,7 +154,7 @@ void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *prob
      Creer_liste_dynamique_generique(&etapes_suivantes);
      etat_suivants(etape_courante, etapes_suivantes, problem);
 
-     while(Taille_liste_dynamique(&etapes_suivantes) > 0)
+     while(Taille_liste_dynamique_generique(&etapes_suivantes) > 0)
      {
        Etape prochaine_etape;
        Enlever_elem_fin_liste_dynamique_generique(&etapes_suivantes, &prochaine_etape, sizeof(Etape));
@@ -166,7 +174,7 @@ void lire_fichier(FILE *f, Problem *p) {
     fscanf(f,"%i\n",&p->nb_colonne);
     p->carte = (char **) malloc(sizeof(char *)*p->nb_ligne);
     if(p->carte==NULL) {
-        printf("\nallocation impossible, pas assez de m�moire\n");
+        printf("\nallocation impossible, pas assez de mémoire\n");
         exit (1);
     } else {
         for (int i = 0; i < p->nb_ligne; i++) {
