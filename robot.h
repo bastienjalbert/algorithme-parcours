@@ -80,7 +80,7 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 *
 */
 void Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique *frontiere);
-
+bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante);
 // TODO argument probleme rajouter par rapport version de base
 // car besoin pour la vérification de la cases (validité de passage)
 // donc savoir si on doit utiliser ici evaluation (et donc passé problem en args)
@@ -95,7 +95,7 @@ void afficher_coordonnee(Coordonnee case_courante);
 
 void afficher_etape(Etape etape_courante);
 
-bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante);
+;
 
 void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem);*/
 
