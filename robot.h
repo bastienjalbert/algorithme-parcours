@@ -3,6 +3,7 @@
 
 #include "librairie_3IL/lib_liste.h"
 #include <stdbool.h>
+#include <string.h>
 
 /**
  * structure de coordonnées
@@ -38,7 +39,6 @@ typedef struct problem {
 typedef struct etape {
     Coordonnee coord;
     Liste_dynamique_generique * chemin;
-    struct element * suivant;
 }Etape;
 
 
@@ -79,11 +79,12 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 *  Prototype des fonctions pour la recherche
 *
 */
-
+void Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique *frontiere);
 
 // TODO argument probleme rajouter par rapport version de base
 // car besoin pour la vérification de la cases (validité de passage)
 // donc savoir si on doit utiliser ici evaluation (et donc passé problem en args)
+/*
 int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, Problem *problem);
 
 bool evaluation(Coordonnee case_courante,Problem *problem);
@@ -96,6 +97,6 @@ void afficher_etape(Etape etape_courante);
 
 bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante);
 
-void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem);
+void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem);*/
 
 #endif // ROBOT_H_INCLUDED

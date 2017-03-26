@@ -15,9 +15,13 @@ int main() {
         }
     else {
         Problem probleme;
-        // cases marquées
-        Liste_dynamique_generique *cases_marquees;
-        Creer_liste_dynamique_generique(cases_marquees);
+        // chemin de base (vide) à initialiser pour la case de départ
+        Liste_dynamique_generique cases_marquees;
+        Creer_liste_dynamique_generique(&cases_marquees);
+
+        Liste_dynamique_generique frontiere;
+        Creer_liste_dynamique_generique(&frontiere);
+
 
         Etape *depart = malloc(sizeof(Etape));
 
@@ -25,9 +29,13 @@ int main() {
         Affiche_matrice(&probleme);
 
         depart->coord = probleme.depart;
-        depart->chemin = cases_marquees;
+        depart->chemin = &cases_marquees;
+        printf("depart\n");
+        show_cord(depart->coord);
 
-        Parcours_Larg(*depart,probleme.arrive, &probleme);
+        Ajouter_elem_tete_liste_dynamique_generique(&frontiere, &depart, sizeof(Etape));
+
+        Parcours_Larg(probleme.arrive, &probleme, &frontiere);
         libere_matrice(&probleme);
         }
     return 0;

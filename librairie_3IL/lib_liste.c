@@ -223,7 +223,7 @@ int test_liste_dynamique_vide(Liste_dynamique * psListe) {
  * \fn int Taille_liste_dynamique(Liste_dynamique * psListe)
  * \brief fonction qui retourne la taille de la liste dynamique (nb d elements stockes)
  * \param psListe Pointeur vers la liste dynamique dont on veut connaitre la taille
- * \return un entier correspondant au nombre d'éléments et -1 si le pointeur est null
+ * \return un entier correspondant au nombre d'ï¿½lï¿½ments et -1 si le pointeur est null
  */
 int Taille_liste_dynamique(Liste_dynamique * psListe) {
     if (psListe == NULL) {
@@ -238,7 +238,7 @@ int Taille_liste_dynamique(Liste_dynamique * psListe) {
  * \fn void Afficher_Contenu_element_liste_dynamique(TypeDonneeListe * psDonnee)
  * \brief fonction qui affiche la liste dynamique
  * \param psListe Pointeur vers la liste dynamique
- * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant ï¿½ -1 si le pointeur est null et 0 sinon
  */
 void Afficher_Contenu_element_liste_dynamique(TypeDonneeListe * psDonnee) {
     if (psDonnee == NULL) {
@@ -252,7 +252,7 @@ void Afficher_Contenu_element_liste_dynamique(TypeDonneeListe * psDonnee) {
  * \fn int Afficher_liste_dynamique(Liste_dynamique * psListe)
  * \brief fonction qui affiche la liste dynamique
  * \param psListe Pointeur vers la liste dynamique
- * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant ï¿½ -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_dynamique(Liste_dynamique * psListe) {
     if (psListe == NULL) {
@@ -622,7 +622,7 @@ int test_liste_dynamique_generique_vide(Liste_dynamique_generique * psListe) {
  * \fn int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe)
  * \brief fonction qui retourne la taille de la liste dynamique (nb d elements stockes)
  * \param psListe Pointeur vers la liste dynamique dont on veut connaitre la taille
- * \return un entier correspondant au nombre d'éléments et -1 si le pointeur est null
+ * \return un entier correspondant au nombre d'ï¿½lï¿½ments et -1 si le pointeur est null
  */
 int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe) {
     if (psListe == NULL) {
@@ -638,7 +638,7 @@ int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe) {
  * \fn int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe)
  * \brief fonction qui affiche la liste dynamique
  * \param psListe Pointeur vers la liste dynamique
- * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant ï¿½ -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe, void (*Afficher_Contenu_element_liste_dynamique_generique)(TypeDonneeListeGenerique psDonnee)) {
     if (psListe == NULL) {
@@ -649,7 +649,7 @@ int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe, void
         Element_liste_dynamique_generique * psElem = psListe->psTete;
         while (psElem!=NULL) {
             // pour le debug j affiche tout
-            //    printf("Element %p: %f, prec :%p, suiv:%p\n",psElem,*((float *)psElem->tdDonnee),psElem->Elementprecedent,psElem->ElementSuivant);
+                printf("Element %p: %f, prec :%p, suiv:%p\n",psElem,*((float *)psElem->tdDonnee),psElem->Elementprecedent,psElem->ElementSuivant);
             // sinon que le contenu
             (*Afficher_Contenu_element_liste_dynamique_generique)(psElem->tdDonnee);
             psElem = psElem->ElementSuivant;
@@ -888,7 +888,7 @@ int Enlever_elem_tete_liste_statique_generique(Liste_statique_generique * psList
     memcpy(pContenu_elem,psListe->TsListe[psListe->iTete],taille_donnee);
     // il faut maintenant libere la memoire de stockage des donnees
     free(psListe->TsListe[psListe->iTete]);
-    psListe->TsListe[psListe->iTete] = NULL ; // pas obligatoire c'est juste pour etre sûr de declencher une alerte du systeme si on tente de dereferencer
+    psListe->TsListe[psListe->iTete] = NULL ; // pas obligatoire c'est juste pour etre sï¿½r de declencher une alerte du systeme si on tente de dereferencer
     psListe->iTete++;
     if(psListe->iTete >= psListe->iNb_elem_max)
         psListe->iTete = 0;
@@ -994,7 +994,7 @@ int test_liste_statique_generique_vide(Liste_statique_generique * psListe) {
  * \fn int Taille_liste_statique_generique(Liste_statique_generique * psListe)
  * \brief fonction qui retourne la taille de la liste statique (nb d elements stockes)
  * \param psListe Pointeur vers la liste statique dont on veut connaitre la taille
- * \return un entier correspondant au nombre d'éléments et -1 si le pointeur est null
+ * \return un entier correspondant au nombre d'ï¿½lï¿½ments et -1 si le pointeur est null
  */
 int Taille_liste_statique_generique(Liste_statique_generique * psListe) {
     if (psListe == NULL ) {
@@ -1010,7 +1010,7 @@ int Taille_liste_statique_generique(Liste_statique_generique * psListe) {
  * \brief fonction qui affiche la liste statique
  * \param psListe Pointeur vers la liste statique
  * \param pfAfficher_Contenu_element_liste_statique_generique Pointeur sur fonction d'affichage
- * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant ï¿½ -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_statique_generique(Liste_statique_generique * psListe, void (*pfAfficher_Contenu_element_liste_statique_generique)(TypeDonneeListeGenerique psDonnee)) {
     int iBoucle;
@@ -1029,5 +1029,3 @@ int Afficher_liste_statique_generique(Liste_statique_generique * psListe, void (
 
     }
 }
-
-
