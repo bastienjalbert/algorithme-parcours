@@ -93,7 +93,6 @@ void show_cord(Coordonnee coord) {
 
     /**
     * Vérifie si une étape est déjà présente dans une liste d'étape passée en argument
-    TODO la fonction ne vérifie pas le dernier élément de la liste
     * @return : true l'étape est présente, false sinon
     */
     bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante) {
@@ -111,9 +110,10 @@ void show_cord(Coordonnee coord) {
         // nombre d'élèment de la liste
         int max_size  = li->iTaille;
 
-        // on itére dans toute la liste pour essayer de trouver etape_courante
-        while(tmp->ElementSuivant != NULL) {
+        bool dernier_element_liste = true;
 
+        // on itére dans toute la liste pour essayer de trouver etape_courante
+        for(int i = 0; i < max_size ; i++) {
             // on récupére les coordonnées de l'étape temporaire
             coord_tmp = ((Etape *)tmp->tdDonnee)->coord;
 
