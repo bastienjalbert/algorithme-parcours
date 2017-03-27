@@ -568,7 +568,7 @@ int Enlever_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psLis
  * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
  */
 int Enlever_elem_fin_liste_dynamique_generique_sans_recup(Liste_dynamique_generique * psListe) {
-    if (psListe == NULL || pContenu_elem == NULL) {
+    if (psListe == NULL) {
         printf("erreur adresse liste ou case resultat NULL");
         return 1;
     }

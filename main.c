@@ -19,6 +19,8 @@ int main() {
         Liste_dynamique_generique cases_marquees;
         Creer_liste_dynamique_generique(&cases_marquees);
 
+
+
         Liste_dynamique_generique frontiere;
         Creer_liste_dynamique_generique(&frontiere);
 
@@ -28,10 +30,13 @@ int main() {
         lire_fichier(file,&probleme);
         Affiche_matrice(&probleme);
 
-        depart->coord = probleme.depart;
+        depart->coord = probleme.depart; 
+
         depart->chemin = &cases_marquees;
         printf("depart\n");
         show_cord(depart->coord);
+
+
 
         Ajouter_elem_tete_liste_dynamique_generique(&frontiere, &depart, sizeof(Etape));
 

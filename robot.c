@@ -7,81 +7,81 @@
 // fonction de débug
 void show_cord(Coordonnee coord) {
 
-    printf("col : %d      |        lin : %d\n", coord.num_col, coord.num_ligne);
+    //printf("col : %d      |        lin : %d\n", coord.num_col, coord.num_ligne);
 
 }
 //********* FONCTIONS DE TESTS *******************//
 
-    void test_Verif_Etape_Appartient_liste()
-    {
-        Liste_dynamique_generique cases_marquees;
-        Creer_liste_dynamique_generique(&cases_marquees);
+void test_Verif_Etape_Appartient_liste()
+{
+    Liste_dynamique_generique cases_marquees;
+    Creer_liste_dynamique_generique(&cases_marquees);
 
-        Etape *et1 = malloc(sizeof(Etape));
-        Etape *et2 = malloc(sizeof(Etape));
-        Etape *et3 = malloc(sizeof(Etape));
-        Etape *et4 = malloc(sizeof(Etape));
-        Coordonnee *t1 = malloc(sizeof(Coordonnee));
-        Coordonnee *t2 = malloc(sizeof(Coordonnee));
-        Coordonnee *t3 = malloc(sizeof(Coordonnee));
-        Coordonnee *t4 = malloc(sizeof(Coordonnee));
-        t1->num_col = 0;
-        t1->num_ligne = 1;
-        et1->coord = *t1;
+    Etape *et1 = malloc(sizeof(Etape));
+    Etape *et2 = malloc(sizeof(Etape));
+    Etape *et3 = malloc(sizeof(Etape));
+    Etape *et4 = malloc(sizeof(Etape));
+    Coordonnee *t1 = malloc(sizeof(Coordonnee));
+    Coordonnee *t2 = malloc(sizeof(Coordonnee));
+    Coordonnee *t3 = malloc(sizeof(Coordonnee));
+    Coordonnee *t4 = malloc(sizeof(Coordonnee));
+    t1->num_col = 0;
+    t1->num_ligne = 1;
+    et1->coord = *t1;
 
-        t2->num_col = 1;
-        t2->num_ligne = 0;
-        et2->coord = *t2;
+    t2->num_col = 1;
+    t2->num_ligne = 0;
+    et2->coord = *t2;
 
-        t3->num_col = 2;
-        t3->num_ligne = 0;
-        et3->coord = *t3;
+    t3->num_col = 2;
+    t3->num_ligne = 0;
+    et3->coord = *t3;
 
-        t4->num_col = 4;
-        t4->num_ligne = 0;
-        et4->coord = *t4;
-
-
-        Ajouter_elem_fin_liste_dynamique_generique(&cases_marquees, et1, sizeof(Etape));
-        Ajouter_elem_fin_liste_dynamique_generique(&cases_marquees, et3, sizeof(Etape));
-        Ajouter_elem_fin_liste_dynamique_generique(&cases_marquees, et4, sizeof(Etape));
-
-        printf("\n\nShould be true : \n");
-        if(Verif_Etape_Appartient_liste(&cases_marquees, *et4)) {
-            printf("true\n");
-        } else {
-            printf("false\n");
-        }
-
-        printf("\n\nShould be false : \n");
-        if(Verif_Etape_Appartient_liste(&cases_marquees, *et2)) {
-            printf("true\n");
-        } else {
-            printf("false\n");
-        }
-
-        printf("\n\nShould be true : \n");
-        if(Verif_Etape_Appartient_liste(&cases_marquees, *et3)) {
-            printf("true\n");
-        } else {
-            printf("false\n");
-        }
+    t4->num_col = 4;
+    t4->num_ligne = 0;
+    et4->coord = *t4;
 
 
+    Ajouter_elem_fin_liste_dynamique_generique(&cases_marquees, et1, sizeof(Etape));
+    Ajouter_elem_fin_liste_dynamique_generique(&cases_marquees, et3, sizeof(Etape));
+    Ajouter_elem_fin_liste_dynamique_generique(&cases_marquees, et4, sizeof(Etape));
+
+    printf("\n\nShould be true : \n");
+    if(Verif_Etape_Appartient_liste(&cases_marquees, *et4)) {
+        printf("true\n");
+    } else {
+        printf("false\n");
     }
 
-    int main(void) {
-
-        test_Verif_Etape_Appartient_liste();
-        return 0;
+    printf("\n\nShould be false : \n");
+    if(Verif_Etape_Appartient_liste(&cases_marquees, *et2)) {
+        printf("true\n");
+    } else {
+        printf("false\n");
     }
 
-    //********* FIN FONCTIONS DE TESTS *******************//
+    printf("\n\nShould be true : \n");
+    if(Verif_Etape_Appartient_liste(&cases_marquees, *et3)) {
+        printf("true\n");
+    } else {
+        printf("false\n");
+    }
 
-    /** comparer deux coordonnées
-    * @return : 0 si elles sont égales
-    */
-    bool Compare(Coordonnee c1, Coordonnee c2) {
+
+}
+
+/*int main(void) {
+
+test_Verif_Etape_Appartient_liste();
+return 0;
+}*/
+
+//********* FIN FONCTIONS DE TESTS *******************//
+
+/** comparer deux coordonnées
+* @return : 0 si elles sont égales
+*/
+bool Compare(Coordonnee c1, Coordonnee c2) {
 
     if(c1.num_col == c2.num_col &&
         c1.num_ligne == c2.num_ligne) {
@@ -107,20 +107,32 @@ void show_cord(Coordonnee coord) {
         // coordonnées temporaire d'une des coordonnées passées dans le chemin
         Coordonnee coord_tmp;
 
-        // nombre d'élèment de la liste
-        int max_size  = li->iTaille;
+        Etape * etape_tmp;
 
-        bool dernier_element_liste = true;
 
         // on itére dans toute la liste pour essayer de trouver etape_courante
-        for(int i = 0; i < max_size ; i++) {
+        for(int i = 0; i < li->iTaille - 1; i++) {
+            // on récupére l'étape temporaire de la liste
+            etape_tmp = (Etape *) tmp->tdDonnee;
+
+//////// PROBLEME LA LIGNE DU DESSUS
+/* Le casting ou la valeur récupérée n'est pas bonne TODO corriger cette erreur
+*
+Program received signal SIGSEGV, Segmentation fault.
+0x0000555555554d0a in Verif_Etape_Appartient_liste (li=0x55555575c6d0, etape_courante=...) at robot.c:116
+116	            etape_tmp = (Etape *) tmp->tdDonnee;
+*
+*/
+
             // on récupére les coordonnées de l'étape temporaire
-            coord_tmp = ((Etape *)tmp->tdDonnee)->coord;
+            coord_tmp = etape_tmp->coord;
 
             // on compare les deux étapes avec leurs coordonnées
             if(Compare(coord_courante, coord_tmp)) {
                 return true;
             }
+
+            // on prend l'élément suivant pour la vérification afin de réitérer
 
             tmp = tmp->ElementSuivant;
         }
@@ -162,17 +174,20 @@ void show_cord(Coordonnee coord) {
 
 
         /**
-          *  Ici on ajoute l'étape courante au chemin de l'étape courante car on
-          *  utilisera ce chemin pour initialiser les nouveaus étapes possibles
-          */
-        Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
+        *  Ici on ajoute l'étape courante au chemin de l'étape courante car on
+        *  utilisera ce chemin pour initialiser les nouveaus étapes possibles
+        */
+        //Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
 
-        Liste_dynamique_generique * nouveau_chemin = sizeof(etape_courante.chemin);
+        Liste_dynamique_generique * nouveau_chemin = malloc(sizeof(etape_courante.chemin));
 
         // coordonnées de la case (<=> étape) courante
         int cur_col = etape_courante.coord.num_col;
 
         int cur_lin = etape_courante.coord.num_ligne;
+
+        // chemin de l'étape courante
+        Liste_dynamique_generique * chemin_etp_courante = etape_courante.chemin;
 
 
 
@@ -200,14 +215,28 @@ void show_cord(Coordonnee coord) {
 
 
         // si la case du haut est valide on l'ajoute
-        if(evaluation(haut->coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, *haut)) // si on n'est pas déjà passé par cette case
+        if(evaluation(haut->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *haut)) // si on n'est pas déjà passé par cette case
         {
             printf("HAUT : \n");
             show_cord(haut->coord);
 
             memcpy(nouveau_chemin, etape_courante.chemin, sizeof(etape_courante.chemin));
 
+
+
             Ajouter_elem_fin_liste_dynamique_generique(nouveau_chemin, haut, sizeof(Etape));
+
+            // debug temporaire pour afficher les valeurs du nouveau chemin TODO supprimer cette portion
+            Element_liste_dynamique_generique *t = nouveau_chemin->psTete;
+            Etape * et = (Etape *) t->tdDonnee;
+
+            for(int i = 0 ; i < nouveau_chemin->iTaille -1 ; i++) {
+
+                show_cord(et->coord);
+                t = t->ElementSuivant;
+                Etape * et = (Etape *) t->tdDonnee;
+            }
+            // fin debug temporaire
 
             haut->chemin = nouveau_chemin; // grave vérif
 
@@ -216,7 +245,7 @@ void show_cord(Coordonnee coord) {
         }
 
         // si la case du bas est valide on l'ajoute
-        if(evaluation(bas->coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, *bas)) // si on n'est pas déjà passé par cette case
+        if(evaluation(bas->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *bas)) // si on n'est pas déjà passé par cette case
         {
             printf("BAS : \n");
             show_cord(bas->coord);
@@ -232,7 +261,7 @@ void show_cord(Coordonnee coord) {
         }
 
         // si la case de gauche est valide on l'ajoute
-        if(evaluation(gauche->coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, *gauche)) // si on n'est pas déjà passé par cette case
+        if(evaluation(gauche->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *gauche)) // si on n'est pas déjà passé par cette case
         {
             printf("GAUHCE : \n");
             show_cord(gauche->coord);
@@ -248,7 +277,7 @@ void show_cord(Coordonnee coord) {
         }
 
         // si la case de droite est valide on l'ajoute
-        if(evaluation(droite->coord,probleme) && !Verif_Etape_Appartient_liste(etape_courante.chemin, *droite)) // si on n'est pas déjà passé par cette case
+        if(evaluation(droite->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *droite)) // si on n'est pas déjà passé par cette case
         {
             printf("DROITE : \n");
             show_cord(droite->coord);
@@ -264,33 +293,39 @@ void show_cord(Coordonnee coord) {
         }
 
         /**
-         * On remet le chemin de l'étape courante à son état initial (TODO savoir si c'est vraiment utile)
-         */
-         Enlever_elem_fin_liste_dynamique_generique_sans_recup(etape_courante.chemin);
+        * On remet le chemin de l'étape courante à son état initial (TODO savoir si c'est vraiment utile)
+        */
+        // Enlever_elem_fin_liste_dynamique_generique_sans_recup(etape_courante.chemin);
 
 
     }
 
 
+    /**
+    * Fonctionne en file donc premier entré dernier traité (LIFO) -> cf boucle et
+    * comment on ajouter les valeurs à la frontière pour comprendre
+    * (ici on traite la tête et avec etat_suivants on remplit la liste par le bas)
+    *
+    */
     void Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique *frontiere)
     {
 
-        Etape *premiere_etape = malloc(sizeof(Etape));
+        Etape *etape_a_traiter = malloc(sizeof(Etape));
 
         // on récupére la première étape
-        Enlever_elem_tete_liste_dynamique_generique(frontiere, &premiere_etape, sizeof(Etape));
+        Enlever_elem_tete_liste_dynamique_generique(frontiere, &etape_a_traiter, sizeof(Etape));
 
 
         // l'étape courante n'est pas l'arrivé alors on continue le parcours
 
-        while(!(premiere_etape->coord.num_col == coord_arrivee.num_col
-            && premiere_etape->coord.num_ligne == coord_arrivee.num_ligne))
+        while(!(etape_a_traiter->coord.num_col == coord_arrivee.num_col
+            && etape_a_traiter->coord.num_ligne == coord_arrivee.num_ligne))
             {
-                // debug coordonées étape courante printf("%d %d\n",premiere_etape->coord.num_col, premiere_etape->coord.num_ligne);
-                etat_suivants(*premiere_etape, frontiere, problem);
+                /* debug coordonées étape courante*/ printf("%d %d\n",etape_a_traiter->coord.num_col, etape_a_traiter->coord.num_ligne);
+                etat_suivants(*etape_a_traiter, frontiere, problem);
 
-                // on récupére la première étape
-                Enlever_elem_tete_liste_dynamique_generique(frontiere, &premiere_etape, sizeof(Etape));
+                // on récupére l'etape à traiter
+                Enlever_elem_tete_liste_dynamique_generique(frontiere, &etape_a_traiter, sizeof(Etape));
             }
 
 

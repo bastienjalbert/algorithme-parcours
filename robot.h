@@ -42,6 +42,10 @@ typedef struct etape {
 }Etape;
 
 
+/**
+ * Affiche des coordonées afin de pouvoir débugguer les données
+ */
+void show_cord(Coordonnee coord);
 
 
 /**
