@@ -561,6 +561,37 @@ int Enlever_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psLis
 }
 
 /**
+ * \fn int Enlever_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonnee contenu_elem)
+ * \brief fonction pour enlever un element en fin d'une liste dynamique
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
+ */
+int Enlever_elem_fin_liste_dynamique_generique_sans_recup(Liste_dynamique_generique * psListe) {
+    if (psListe == NULL || pContenu_elem == NULL) {
+        printf("erreur adresse liste ou case resultat NULL");
+        return 1;
+    }
+    if(psListe->iTaille <= 0) {
+        printf("\nErreur liste vide");
+        return 2;
+    }
+    Element_liste_dynamique_generique * elem_enleve = psListe->psFin;
+    psListe->psFin = elem_enleve->Elementprecedent;
+    if(psListe->iTaille > 1)
+        psListe->psFin->ElementSuivant = NULL ;
+    psListe->iTaille--;
+    // il faut maintenant libere aussi la memoire de stockage des donnees
+    free(elem_enleve->tdDonnee);
+    free(elem_enleve);
+    // si il y a plus d element, mettre le fin a NULL
+    if (psListe->iTaille == 0) {
+        psListe->psTete = NULL;
+    }
+    return 0;
+}
+
+/**
  * \fn int tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
  * \brief fonction pour recuperer l element en tete d une liste dynamique sans l enlever
  * \param psListe Pointeur vers une liste dynamique dont on veut le contenu de l element de tete

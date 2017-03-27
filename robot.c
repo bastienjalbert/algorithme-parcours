@@ -161,10 +161,13 @@ void show_cord(Coordonnee coord) {
 
 
 
-        // on ajoute l'étape courante au chemin de l'étape courante pour la réutilisation après
+        /**
+          *  Ici on ajoute l'étape courante au chemin de l'étape courante car on
+          *  utilisera ce chemin pour initialiser les nouveaus étapes possibles
+          */
         Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
 
-        Liste_dynamique_generique * nouveau_chemin = malloc(52222);
+        Liste_dynamique_generique * nouveau_chemin = sizeof(etape_courante.chemin);
 
         // coordonnées de la case (<=> étape) courante
         int cur_col = etape_courante.coord.num_col;
@@ -259,6 +262,11 @@ void show_cord(Coordonnee coord) {
             Ajouter_elem_fin_liste_dynamique_generique(frontiere, &droite, sizeof(Etape));
 
         }
+
+        /**
+         * On remet le chemin de l'étape courante à son état initial (TODO savoir si c'est vraiment utile)
+         */
+         Enlever_elem_fin_liste_dynamique_generique_sans_recup(etape_courante.chemin);
 
 
     }
