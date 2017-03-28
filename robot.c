@@ -164,6 +164,7 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
 
     /**
     * Récupére la liste des toutes les cases voisines visitables
+    * TODO Problème de parcours ici : à corriger
     */
     void etat_suivants(Etape etape_courante, Liste_dynamique_generique *frontiere, Problem *probleme) {
 
