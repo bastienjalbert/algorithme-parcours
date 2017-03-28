@@ -64,6 +64,14 @@ void lire_fichier(FILE *f, Problem *p);
 void Affiche_matrice(Problem *p);
 
 /**
+ * \fn void Affiche_matrice(Problem *p, Liste_dynamique_generique *liste)
+ * \brief permet d afficher la carte ainsi que les Étapes passé en paramètre
+ * \param p structure de donn�e pour stocker les �l�ments du probl�me
+ */
+void Affiche_matrice_avec_chemin(Problem *p, Liste_dynamique_generique *liste);
+
+
+/**
  * \fn void libere_matrice(Problem *p)
  * \brief permet de liberer la memoire allouee pour la carte
  * \param p structure de donn�e pour stocker les �l�ments du probl�me

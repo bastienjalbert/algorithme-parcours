@@ -19,6 +19,9 @@ typedef struct liste_dynamique {
     int iTaille;                                    // nombre d'element de la liste
 } Liste_dynamique;
 
+
+
+
 /**
  * \fn int Vider_liste_dynamique (Liste_dynamique * psListe)
  * \brief fonction pour vider une liste dynamique
@@ -271,6 +274,38 @@ int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe);
  * \return un entier correspondant � -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe, void (*pfAfficher_Contenu_element_liste_dynamique_generique)(TypeDonneeListeGenerique psDonnee));
+
+// Ajouté par le groupe pour le projet de parcours spécifiquement
+/** @author : groupe
+ * \fn int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique contenu_elem,size_t taille_donnee, int iPlace_enleve)
+ * \brief fonction pour recuperer un element en ieme position d'une liste dynamique et retourner sa valeur
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \param taille_donnee taille du contenu a stocke
+ * \param iPlace_enleve place d ajout de l element    remarque : 1 <= iPlace_enleve <= iTaille
+ * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide, , 3 si le numero de la place n existe pas et 0 sinon
+ */
+int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem, int iPlace_enleve, int taille_donnee);
+
+/** @author: groupe
+ * \fn int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
+ * \brief fonction pour recuperer un element en tete d'une liste dynamique et retourner sa valeur
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \return un entier correspondant a 1 si il y a un probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
+ */
+int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem,size_t taille_donnee);
+
+/**
+ * \fn int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonnee contenu_elem)
+ * \brief fonction pour recuperer un element en fin d'une liste dynamique et retourner sa valeur
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
+ */
+int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique  pContenu_elem,size_t taille_donnee);
+
+// fin ajout
 
 /********************** Liste dyna-statique generique(tableau avec gestion circulaire)  ********************************/
 // L'utilisateur peut utiliser la liste sans modifier ce fichier

@@ -168,14 +168,7 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
     */
     void etat_suivants(Etape etape_courante, Liste_dynamique_generique *frontiere, Problem *probleme) {
 
-
-
-        /**
-        *  Ici on ajoute l'étape courante au chemin de l'étape courante car on
-        *  utilisera ce chemin pour initialiser les nouveaus étapes possibles
-        */
-        //Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
-
+        //
         Liste_dynamique_generique * nouveau_chemin = malloc(sizeof(Liste_dynamique_generique));
 
         // coordonnées de la case (<=> étape) courante
@@ -214,8 +207,8 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
         // si la case du haut est valide on l'ajoute
         if(evaluation(haut->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *haut)) // si on n'est pas déjà passé par cette case
         {
-            printf("HAUT : \n");
-            show_cord(haut->coord);
+        //    printf("HAUT : \n");
+        //    show_cord(haut->coord);
 
             memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
@@ -244,8 +237,8 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
         // si la case du bas est valide on l'ajoute
         if(evaluation(bas->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *bas)) // si on n'est pas déjà passé par cette case
         {
-            printf("BAS : \n");
-            show_cord(bas->coord);
+        //    printf("BAS : \n");
+        //    show_cord(bas->coord);
 
             memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
@@ -260,8 +253,8 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
         // si la case de gauche est valide on l'ajoute
         if(evaluation(gauche->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *gauche)) // si on n'est pas déjà passé par cette case
         {
-            printf("GAUHCE : \n");
-            show_cord(gauche->coord);
+        //    printf("GAUHCE : \n");
+        //    show_cord(gauche->coord);
 
             memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
@@ -276,8 +269,8 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
         // si la case de droite est valide on l'ajoute
         if(evaluation(droite->coord,probleme) && !Verif_Etape_Appartient_liste(chemin_etp_courante, *droite)) // si on n'est pas déjà passé par cette case
         {
-            printf("DROITE : \n");
-            show_cord(droite->coord);
+        //    printf("DROITE : \n");
+        //    show_cord(droite->coord);
 
             memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
@@ -288,11 +281,6 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
             Ajouter_elem_fin_liste_dynamique_generique(frontiere, &droite, sizeof(Etape));
 
         }
-
-        /**
-        * On remet le chemin de l'étape courante à son état initial (TODO savoir si c'est vraiment utile)
-        */
-        // Enlever_elem_fin_liste_dynamique_generique_sans_recup(etape_courante.chemin);
 
 
     }
@@ -321,8 +309,15 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
                 /* debug coordonées étape courante*/ printf("%d %d\n",etape_a_traiter->coord.num_col, etape_a_traiter->coord.num_ligne);
                 etat_suivants(*etape_a_traiter, frontiere, problem);
 
+
+                system("clear");
+                // debug :
+                Affiche_matrice_avec_chemin(problem, frontiere);
+
                 // on récupére l'etape à traiter
                 Enlever_elem_tete_liste_dynamique_generique(frontiere, &etape_a_traiter, sizeof(Etape));
+
+
             }
 
 
@@ -371,6 +366,35 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
                     }else{
                         printf("%c",p->carte[i][j]);
                     }
+                }
+                printf("|\n");
+            }
+        }
+
+        void Affiche_matrice_avec_chemin(Problem *p, Liste_dynamique_generique *liste) {
+            for (int i = 0; i < p->nb_ligne; i++) {
+                printf("|");
+                for (int j = 0; j < p->nb_colonne; j++) {
+
+                    if( p->arrive.num_ligne==i&&p->arrive.num_col==j){
+                        putchar('A');
+                    }else if( p->depart.num_ligne==i&&p->depart.num_col==j){
+                        putchar('D');
+                    }else{
+                        printf("%c",p->carte[i][j]);
+                    }
+
+                    for(int k = 1; k < liste->iTaille; k++) {
+
+                        Etape * etape = malloc(sizeof(Etape));
+                        Recuperer_elem_ieme_liste_dynamique_generique(liste, &etape, k, sizeof(Etape));
+                        //
+                        if(etape->coord.num_col == j && etape->coord.num_ligne == i) {
+                            putchar('O');
+                        }
+
+                    }
+
                 }
                 printf("|\n");
             }
