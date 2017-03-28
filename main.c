@@ -30,7 +30,7 @@ int main() {
         lire_fichier(file,&probleme);
         Affiche_matrice(&probleme);
 
-        depart->coord = probleme.depart; 
+        depart->coord = probleme.depart;
 
         depart->chemin = &cases_marquees;
         printf("depart\n");

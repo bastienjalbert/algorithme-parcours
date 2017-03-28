@@ -7,7 +7,7 @@
 // fonction de débug
 void show_cord(Coordonnee coord) {
 
-    //printf("col : %d      |        lin : %d\n", coord.num_col, coord.num_ligne);
+    printf("col : %d      |        lin : %d\n", coord.num_col, coord.num_ligne);
 
 }
 //********* FONCTIONS DE TESTS *******************//
@@ -112,20 +112,17 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
 
         // on itére dans toute la liste pour essayer de trouver etape_courante
         for(int i = 0; i < li->iTaille - 1; i++) {
+
             // on récupére l'étape temporaire de la liste
             etape_tmp = (Etape *) tmp->tdDonnee;
 
-//////// PROBLEME LA LIGNE DU DESSUS
-/* Le casting ou la valeur récupérée n'est pas bonne TODO corriger cette erreur
-*
-Program received signal SIGSEGV, Segmentation fault.
-0x0000555555554d0a in Verif_Etape_Appartient_liste (li=0x55555575c6d0, etape_courante=...) at robot.c:116
-116	            etape_tmp = (Etape *) tmp->tdDonnee;
-*
-*/
+
 
             // on récupére les coordonnées de l'étape temporaire
             coord_tmp = etape_tmp->coord;
+
+
+
 
             // on compare les deux étapes avec leurs coordonnées
             if(Compare(coord_courante, coord_tmp)) {
@@ -133,7 +130,6 @@ Program received signal SIGSEGV, Segmentation fault.
             }
 
             // on prend l'élément suivant pour la vérification afin de réitérer
-
             tmp = tmp->ElementSuivant;
         }
 
@@ -169,7 +165,7 @@ Program received signal SIGSEGV, Segmentation fault.
     /**
     * Récupére la liste des toutes les cases voisines visitables
     */
-    int etat_suivants(Etape etape_courante, Liste_dynamique_generique *frontiere, Problem *probleme) {
+    void etat_suivants(Etape etape_courante, Liste_dynamique_generique *frontiere, Problem *probleme) {
 
 
 
@@ -179,7 +175,7 @@ Program received signal SIGSEGV, Segmentation fault.
         */
         //Ajouter_elem_fin_liste_dynamique_generique(etape_courante.chemin, &etape_courante, sizeof(Etape));
 
-        Liste_dynamique_generique * nouveau_chemin = malloc(sizeof(etape_courante.chemin));
+        Liste_dynamique_generique * nouveau_chemin = malloc(sizeof(Liste_dynamique_generique));
 
         // coordonnées de la case (<=> étape) courante
         int cur_col = etape_courante.coord.num_col;
@@ -220,14 +216,14 @@ Program received signal SIGSEGV, Segmentation fault.
             printf("HAUT : \n");
             show_cord(haut->coord);
 
-            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(etape_courante.chemin));
+            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
 
 
             Ajouter_elem_fin_liste_dynamique_generique(nouveau_chemin, haut, sizeof(Etape));
 
             // debug temporaire pour afficher les valeurs du nouveau chemin TODO supprimer cette portion
-            Element_liste_dynamique_generique *t = nouveau_chemin->psTete;
+            /*Element_liste_dynamique_generique *t = nouveau_chemin->psTete;
             Etape * et = (Etape *) t->tdDonnee;
 
             for(int i = 0 ; i < nouveau_chemin->iTaille -1 ; i++) {
@@ -235,7 +231,7 @@ Program received signal SIGSEGV, Segmentation fault.
                 show_cord(et->coord);
                 t = t->ElementSuivant;
                 Etape * et = (Etape *) t->tdDonnee;
-            }
+            }*/
             // fin debug temporaire
 
             haut->chemin = nouveau_chemin; // grave vérif
@@ -250,7 +246,7 @@ Program received signal SIGSEGV, Segmentation fault.
             printf("BAS : \n");
             show_cord(bas->coord);
 
-            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(etape_courante.chemin));
+            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
             Ajouter_elem_fin_liste_dynamique_generique(nouveau_chemin, bas, sizeof(Etape));
 
@@ -266,7 +262,7 @@ Program received signal SIGSEGV, Segmentation fault.
             printf("GAUHCE : \n");
             show_cord(gauche->coord);
 
-            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(etape_courante.chemin));
+            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
             Ajouter_elem_fin_liste_dynamique_generique(nouveau_chemin, gauche, sizeof(Etape));
 
@@ -282,7 +278,7 @@ Program received signal SIGSEGV, Segmentation fault.
             printf("DROITE : \n");
             show_cord(droite->coord);
 
-            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(etape_courante.chemin));
+            memcpy(nouveau_chemin, etape_courante.chemin, sizeof(Liste_dynamique_generique));
 
             Ajouter_elem_fin_liste_dynamique_generique(nouveau_chemin, droite, sizeof(Etape));
 
