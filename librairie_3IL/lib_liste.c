@@ -316,6 +316,50 @@ int Creer_liste_dynamique_generique (Liste_dynamique_generique * psListe) {
     return 0;
 }
 
+
+/** Ajouté par le groupe pour le projet
+ * \fn int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe)
+ * \brief fonction pour dupliquer une liste dynamique générique dans une autre, cette fonction garde intacte les données (aucun free)
+ * \param psListe Pointeur vers la liste  a initialiser
+ * \return un entier correspondant a 1 si il y a probleme (pointeur null) et 0 sinon
+ */
+int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe, Liste_dynamique_generique * aRetourner, size_t taille_donnee) {
+    if (psListe == NULL || aRetourner == NULL) {
+        printf("erreur adresse liste  NULL");
+        return 1;
+    }
+    if(Taille_liste_dynamique_generique(aRetourner) != 0) {
+        printf("erreur liste qui va contenir les contenus dupliqués pas vide");
+        return 1;
+    }
+    Creer_liste_dynamique_generique(aRetourner);
+
+    TypeDonneeListeGenerique * uneValeur;
+
+    // on récupére les valeurs de la liste initiale et on les copies dans la nouvelle liste
+    for(int i = 1 ; i <= psListe->iTaille ; i++) {
+        // on affecte de la mémoire à une nouvelle données générique
+        uneValeur = (TypeDonneeListeGenerique *) malloc(taille_donnee);
+
+        // on récupére la donnée dans la liste
+        Recuperer_elem_ieme_liste_dynamique_generique(psListe, uneValeur, i, taille_donnee);
+
+        if(i == 1) {
+            // on ajoute la nouvelle donnée à la nouvelle liste
+            Ajouter_elem_tete_liste_dynamique_generique(aRetourner, uneValeur, taille_donnee);
+        } else {
+            // on ajoute la nouvelle donnée à la nouvelle liste
+            Ajouter_elem_fin_liste_dynamique_generique(aRetourner, uneValeur, taille_donnee);
+        }
+
+
+
+    }
+
+    return 0;
+
+}
+
 /**
  * \fn int Ajouter_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
  * \brief fonction pour ajouter un element dont le contenu est donne en parametre en tete d une liste dynamique
@@ -471,7 +515,7 @@ int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * ps
         printf("\n erreur impossible liste vide");
         return 2;
     }
-    if(iPlace_enleve > psListe->iTaille || iPlace_enleve < 0){
+    if(iPlace_enleve > psListe->iTaille || iPlace_enleve <= 0){
         printf("\n erreur place inexistante dans la liste");
         return 3;
     }

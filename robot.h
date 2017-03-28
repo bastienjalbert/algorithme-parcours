@@ -63,12 +63,20 @@ void lire_fichier(FILE *f, Problem *p);
  */
 void Affiche_matrice(Problem *p);
 
+// Ajouté par le groupe pour le projet
+
 /**
  * \fn void Affiche_matrice(Problem *p, Liste_dynamique_generique *liste)
  * \brief permet d afficher la carte ainsi que les Étapes passé en paramètre
  * \param p structure de donn�e pour stocker les �l�ments du probl�me
  */
 void Affiche_matrice_avec_chemin(Problem *p, Liste_dynamique_generique *liste);
+
+
+// affiche les coordonées d'une liste d'étape
+void afficher_chemin(Liste_dynamique_generique *liste);
+
+//
 
 
 /**

@@ -276,6 +276,16 @@ int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe);
 int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe, void (*pfAfficher_Contenu_element_liste_dynamique_generique)(TypeDonneeListeGenerique psDonnee));
 
 // Ajouté par le groupe pour le projet de parcours spécifiquement
+
+/** Ajouté par le groupe pour le projet
+ * \fn int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe)
+ * \brief fonction pour dupliquer une liste dynamique générique dans une autre, cette fonction garde intacte les données (aucun free)
+ * \param psListe Pointeur vers la liste  a initialiser
+ * \return un entier correspondant a 1 si il y a probleme (pointeur null) et 0 sinon
+ */
+int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe,Liste_dynamique_generique * aRetourner, size_t taille_donnee);
+
+
 /** @author : groupe
  * \fn int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique contenu_elem,size_t taille_donnee, int iPlace_enleve)
  * \brief fonction pour recuperer un element en ieme position d'une liste dynamique et retourner sa valeur

@@ -33,10 +33,6 @@ int main() {
         depart->coord = probleme.depart;
 
         depart->chemin = &cases_marquees;
-        printf("depart\n");
-        show_cord(depart->coord);
-
-
 
         Ajouter_elem_tete_liste_dynamique_generique(&frontiere, &depart, sizeof(Etape));
 
