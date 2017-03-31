@@ -16,27 +16,34 @@ int main() {
     else {
         Problem probleme;
         // chemin de base (vide) à initialiser pour la case de départ
-        Liste_dynamique_generique cases_marquees;
-        Creer_liste_dynamique_generique(&cases_marquees);
+        Liste_dynamique_generique chemin_etape_depart;
+        Creer_liste_dynamique_generique(&chemin_etape_depart);
 
-
-
-        Liste_dynamique_generique frontiere;
-        Creer_liste_dynamique_generique(&frontiere);
-
-
-        Etape *depart = malloc(sizeof(Etape));
-
+        // lecture et affichage du problème
         lire_fichier(file,&probleme);
         Affiche_matrice(&probleme);
 
-        depart->coord = probleme.depart;
+        // on initialise le chemin du départ avec lui - même (on est passé par le départ pour arriver au départ)
+        Coordonnee e;
+        e.num_col = probleme.depart.num_col;
+        e.num_ligne = probleme.depart.num_ligne;
+        Ajouter_elem_tete_liste_dynamique_generique(&chemin_etape_depart, &e, sizeof(Coordonnee));
 
-        depart->chemin = &cases_marquees;
+        // TODO : changer le nom en cases_a_traiter
+        Liste_dynamique_generique frontiere;
+        Creer_liste_dynamique_generique(&frontiere);
 
+        // initialisation de l'étape de départ à traiter
+        Etape depart;
+ 
+        depart.coord = probleme.depart;
+        depart.chemin = chemin_etape_depart;
+        // on ajouter au case à traiter le départ (test initial)
         Ajouter_elem_tete_liste_dynamique_generique(&frontiere, &depart, sizeof(Etape));
-
-        Parcours_Larg(probleme.arrive, &probleme, &frontiere);
+        // on lance notre algorithme de parcours en largeur
+        Etape etapeFinale;
+        etapeFinale = Parcours_Larg(probleme.arrive, &probleme, frontiere);
+        afficher_chemin_coordonnee(&etapeFinale.chemin);
         libere_matrice(&probleme);
         }
     return 0;

@@ -223,7 +223,7 @@ int test_liste_dynamique_vide(Liste_dynamique * psListe) {
  * \fn int Taille_liste_dynamique(Liste_dynamique * psListe)
  * \brief fonction qui retourne la taille de la liste dynamique (nb d elements stockes)
  * \param psListe Pointeur vers la liste dynamique dont on veut connaitre la taille
- * \return un entier correspondant au nombre d'�l�ments et -1 si le pointeur est null
+ * \return un entier correspondant au nombre d'éléments et -1 si le pointeur est null
  */
 int Taille_liste_dynamique(Liste_dynamique * psListe) {
     if (psListe == NULL) {
@@ -238,7 +238,7 @@ int Taille_liste_dynamique(Liste_dynamique * psListe) {
  * \fn void Afficher_Contenu_element_liste_dynamique(TypeDonneeListe * psDonnee)
  * \brief fonction qui affiche la liste dynamique
  * \param psListe Pointeur vers la liste dynamique
- * \return un entier correspondant � -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
  */
 void Afficher_Contenu_element_liste_dynamique(TypeDonneeListe * psDonnee) {
     if (psDonnee == NULL) {
@@ -252,7 +252,7 @@ void Afficher_Contenu_element_liste_dynamique(TypeDonneeListe * psDonnee) {
  * \fn int Afficher_liste_dynamique(Liste_dynamique * psListe)
  * \brief fonction qui affiche la liste dynamique
  * \param psListe Pointeur vers la liste dynamique
- * \return un entier correspondant � -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_dynamique(Liste_dynamique * psListe) {
     if (psListe == NULL) {
@@ -274,6 +274,132 @@ int Afficher_liste_dynamique(Liste_dynamique * psListe) {
 }
 
 /********************* Liste dynamique generique **********************************/
+
+/**
+ * \fn int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonnee contenu_elem)
+ * \brief fonction pour recuperer un element en fin d'une liste dynamique et retourner sa valeur
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
+ */
+int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique  pContenu_elem,size_t taille_donnee) {
+    if (psListe == NULL || pContenu_elem == NULL) {
+        printf("erreur adresse liste ou case resultat NULL");
+        return 1;
+    }
+    if(psListe->iTaille <= 0) {
+        printf("\nErreur liste vide");
+        return 2;
+    }
+    memcpy(pContenu_elem,psListe->psFin->tdDonnee,taille_donnee);
+
+    return 0;
+}
+
+
+/** @author: groupe
+ * \fn int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
+ * \brief fonction pour recuperer un element en tete d'une liste dynamique et retourner sa valeur
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \return un entier correspondant a 1 si il y a un probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
+ */
+int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem,size_t taille_donnee) {
+    if (psListe == NULL || pContenu_elem == NULL) {
+        printf("erreur adresse liste ou case resultat NULL");
+        return 1;
+    }
+    if(psListe->iTaille <= 0) {
+        printf("\nErreur liste vide");
+        return 2;
+    }
+    memcpy(pContenu_elem,psListe->psTete->tdDonnee,taille_donnee);
+
+    return 0;
+}
+
+/** @author : bastien enjalbert
+ * \fn int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique contenu_elem,size_t taille_donnee, int iPlace_enleve)
+ * \brief fonction pour recuperer un element en ieme position d'une liste dynamique et retourner sa valeur
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param contenu_elem adresse remplie avec le contenu de l element en tete
+ * \param taille_donnee taille du contenu a stocke
+ * \param iPlace_enleve place d ajout de l element    remarque : 1 <= iPlace_enleve <= iTaille
+ * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide, , 3 si le numero de la place n existe pas et 0 sinon
+ */
+int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem, int iPlace_enleve, int taille_donnee){
+    int iCompteur_element = 1;
+    if (psListe == NULL || pContenu_elem == NULL) {
+        printf("erreur adresse liste ou contenu NULL");
+        return 1;
+    }
+    if (psListe->iTaille <= 0) {
+        printf("\n erreur impossible liste vide");
+        return 2;
+    }
+    if(iPlace_enleve > psListe->iTaille || iPlace_enleve <= 0){
+        printf("\n erreur place inexistante dans la liste");
+        return 3;
+    }
+    if(iPlace_enleve == 1 ){
+        return Recuperer_elem_tete_liste_dynamique_generique(psListe,pContenu_elem,taille_donnee);
+    }
+    if(iPlace_enleve == psListe->iTaille){
+        return Recuperer_elem_fin_liste_dynamique_generique(psListe,pContenu_elem,taille_donnee);
+    }
+    // recherche de l element en i eme position actuellement
+    Element_liste_dynamique_generique * psElem_i_eme = psListe->psTete;
+    while(iCompteur_element<iPlace_enleve){
+        psElem_i_eme = psElem_i_eme->ElementSuivant;
+        iCompteur_element++;
+    }
+    memcpy(pContenu_elem,psElem_i_eme->tdDonnee,taille_donnee);
+
+    return 0;
+}
+
+/** @author : bastien enjalbert
+ * \fn int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe)
+ * \brief fonction pour dupliquer une liste dynamique générique dans une autre, cette fonction garde intacte les données (aucun free)
+ * \param psListe Pointeur vers la liste  a dupliquer
+ * \param aRetourner Pointeur vers la liste  a initialiser
+ * \return un entier correspondant a 1 si il y a probleme (pointeur null) et 0 sinon
+ */
+int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe, Liste_dynamique_generique * aRetourner, size_t taille_donnee) {
+    if (psListe == NULL || aRetourner == NULL) {
+        printf("erreur adresse liste  NULL");
+        return 1;
+    }
+    if(Taille_liste_dynamique_generique(aRetourner) != 0) {
+        printf("erreur liste qui va contenir les contenus dupliqués pas vide");
+        return 1;
+    }
+    Creer_liste_dynamique_generique(aRetourner);
+
+    TypeDonneeListeGenerique uneValeur;
+
+    // on récupére les valeurs de la liste initiale et on les copies dans la nouvelle liste
+    for(int i = 1 ; i <= psListe->iTaille ; i++) {
+        // on affecte de la mémoire à une nouvelle données générique
+        uneValeur = (TypeDonneeListeGenerique) malloc(taille_donnee);
+
+        // on récupére la donnée dans la liste
+        Recuperer_elem_ieme_liste_dynamique_generique(psListe, uneValeur, i, taille_donnee);
+
+        if(i == 1) {
+            // on ajoute la nouvelle donnée à la nouvelle liste
+            Ajouter_elem_tete_liste_dynamique_generique(aRetourner, uneValeur, taille_donnee);
+        } else {
+            // on ajoute la nouvelle donnée à la nouvelle liste
+            Ajouter_elem_fin_liste_dynamique_generique(aRetourner, uneValeur, taille_donnee);
+        }
+
+    }
+
+    return 0;
+
+}
+
 
 
 /**
@@ -314,50 +440,6 @@ int Creer_liste_dynamique_generique (Liste_dynamique_generique * psListe) {
     psListe->psFin = NULL;
     psListe->psTete = NULL;
     return 0;
-}
-
-
-/** Ajouté par le groupe pour le projet
- * \fn int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe)
- * \brief fonction pour dupliquer une liste dynamique générique dans une autre, cette fonction garde intacte les données (aucun free)
- * \param psListe Pointeur vers la liste  a initialiser
- * \return un entier correspondant a 1 si il y a probleme (pointeur null) et 0 sinon
- */
-int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe, Liste_dynamique_generique * aRetourner, size_t taille_donnee) {
-    if (psListe == NULL || aRetourner == NULL) {
-        printf("erreur adresse liste  NULL");
-        return 1;
-    }
-    if(Taille_liste_dynamique_generique(aRetourner) != 0) {
-        printf("erreur liste qui va contenir les contenus dupliqués pas vide");
-        return 1;
-    }
-    Creer_liste_dynamique_generique(aRetourner);
-
-    TypeDonneeListeGenerique * uneValeur;
-
-    // on récupére les valeurs de la liste initiale et on les copies dans la nouvelle liste
-    for(int i = 1 ; i <= psListe->iTaille ; i++) {
-        // on affecte de la mémoire à une nouvelle données générique
-        uneValeur = (TypeDonneeListeGenerique *) malloc(taille_donnee);
-
-        // on récupére la donnée dans la liste
-        Recuperer_elem_ieme_liste_dynamique_generique(psListe, uneValeur, i, taille_donnee);
-
-        if(i == 1) {
-            // on ajoute la nouvelle donnée à la nouvelle liste
-            Ajouter_elem_tete_liste_dynamique_generique(aRetourner, uneValeur, taille_donnee);
-        } else {
-            // on ajoute la nouvelle donnée à la nouvelle liste
-            Ajouter_elem_fin_liste_dynamique_generique(aRetourner, uneValeur, taille_donnee);
-        }
-
-
-
-    }
-
-    return 0;
-
 }
 
 /**
@@ -496,46 +578,6 @@ int Ajouter_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psLi
     return 0;
 }
 
-/** @author : groupe
- * \fn int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique contenu_elem,size_t taille_donnee, int iPlace_enleve)
- * \brief fonction pour recuperer un element en ieme position d'une liste dynamique et retourner sa valeur
- * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
- * \param contenu_elem adresse remplie avec le contenu de l element en tete
- * \param taille_donnee taille du contenu a stocke
- * \param iPlace_enleve place d ajout de l element    remarque : 1 <= iPlace_enleve <= iTaille
- * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide, , 3 si le numero de la place n existe pas et 0 sinon
- */
-int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem, int iPlace_enleve, int taille_donnee){
-    int iCompteur_element = 1;
-    if (psListe == NULL || pContenu_elem == NULL) {
-        printf("erreur adresse liste ou contenu NULL");
-        return 1;
-    }
-    if (psListe->iTaille <= 0) {
-        printf("\n erreur impossible liste vide");
-        return 2;
-    }
-    if(iPlace_enleve > psListe->iTaille || iPlace_enleve <= 0){
-        printf("\n erreur place inexistante dans la liste");
-        return 3;
-    }
-    if(iPlace_enleve == 1 ){
-        return Recuperer_elem_tete_liste_dynamique_generique(psListe,pContenu_elem,taille_donnee);
-    }
-    if(iPlace_enleve == psListe->iTaille){
-        return Recuperer_elem_fin_liste_dynamique_generique(psListe,pContenu_elem,taille_donnee);
-    }
-    // recherche de l element en i eme position actuellement
-    Element_liste_dynamique_generique * psElem_i_eme = psListe->psTete;
-    while(iCompteur_element<iPlace_enleve){
-        psElem_i_eme = psElem_i_eme->ElementSuivant;
-        iCompteur_element++;
-    }
-    memcpy(pContenu_elem,psElem_i_eme->tdDonnee,taille_donnee);
-
-    return 0;
-}
-
 /**
  * \fn int Enlever_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique contenu_elem,size_t taille_donnee, int iPlace_enleve)
  * \brief fonction pour enlever un element en ieme position d'une liste dynamique et retourner sa valeur
@@ -579,26 +621,6 @@ int Enlever_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psLi
     return 0;
 }
 
-/** @author: groupe
- * \fn int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
- * \brief fonction pour recuperer un element en tete d'une liste dynamique et retourner sa valeur
- * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
- * \param contenu_elem adresse remplie avec le contenu de l element en tete
- * \return un entier correspondant a 1 si il y a un probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
- */
-int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem,size_t taille_donnee) {
-    if (psListe == NULL || pContenu_elem == NULL) {
-        printf("erreur adresse liste ou case resultat NULL");
-        return 1;
-    }
-    if(psListe->iTaille <= 0) {
-        printf("\nErreur liste vide");
-        return 2;
-    }
-    memcpy(pContenu_elem,psListe->psTete->tdDonnee,taille_donnee);
-
-    return 0;
-}
 
 /**
  * \fn int Enlever_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
@@ -633,29 +655,10 @@ int Enlever_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psLi
 }
 
 /**
- * \fn int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonnee contenu_elem)
- * \brief fonction pour recuperer un element en fin d'une liste dynamique et retourner sa valeur
- * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
- * \param contenu_elem adresse remplie avec le contenu de l element en tete
- * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide et 0 sinon
- */
-int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique  pContenu_elem,size_t taille_donnee) {
-    if (psListe == NULL || pContenu_elem == NULL) {
-        printf("erreur adresse liste ou case resultat NULL");
-        return 1;
-    }
-    if(psListe->iTaille <= 0) {
-        printf("\nErreur liste vide");
-        return 2;
-    }
-    memcpy(pContenu_elem,psListe->psTete->tdDonnee,taille_donnee);
-
-    return 0;
-}
-
-
-/**
  * \fn int Enlever_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonnee contenu_elem)
+ * \author P.PITIOT / Correction R HORVAT / A GUILLON
+ * \version 0.2
+ * \date 05/04/2016
  * \brief fonction pour enlever un element en fin d'une liste dynamique et retourner sa valeur
  * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
  * \param contenu_elem adresse remplie avec le contenu de l element en tete
@@ -670,7 +673,7 @@ int Enlever_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psLis
         printf("\nErreur liste vide");
         return 2;
     }
-    memcpy(pContenu_elem,psListe->psTete->tdDonnee,taille_donnee);
+    memcpy(pContenu_elem,psListe->psFin->tdDonnee,taille_donnee);
     Element_liste_dynamique_generique * elem_enleve = psListe->psFin;
     psListe->psFin = elem_enleve->Elementprecedent;
     if(psListe->iTaille > 1)
@@ -685,7 +688,6 @@ int Enlever_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psLis
     }
     return 0;
 }
-
 
 /**
  * \fn int tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
@@ -749,7 +751,7 @@ int test_liste_dynamique_generique_vide(Liste_dynamique_generique * psListe) {
  * \fn int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe)
  * \brief fonction qui retourne la taille de la liste dynamique (nb d elements stockes)
  * \param psListe Pointeur vers la liste dynamique dont on veut connaitre la taille
- * \return un entier correspondant au nombre d'�l�ments et -1 si le pointeur est null
+ * \return un entier correspondant au nombre d'éléments et -1 si le pointeur est null
  */
 int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe) {
     if (psListe == NULL) {
@@ -765,7 +767,7 @@ int Taille_liste_dynamique_generique(Liste_dynamique_generique * psListe) {
  * \fn int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe)
  * \brief fonction qui affiche la liste dynamique
  * \param psListe Pointeur vers la liste dynamique
- * \return un entier correspondant � -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe, void (*Afficher_Contenu_element_liste_dynamique_generique)(TypeDonneeListeGenerique psDonnee)) {
     if (psListe == NULL) {
@@ -776,7 +778,7 @@ int Afficher_liste_dynamique_generique(Liste_dynamique_generique * psListe, void
         Element_liste_dynamique_generique * psElem = psListe->psTete;
         while (psElem!=NULL) {
             // pour le debug j affiche tout
-                printf("Element %p: %f, prec :%p, suiv:%p\n",psElem,*((float *)psElem->tdDonnee),psElem->Elementprecedent,psElem->ElementSuivant);
+            //    printf("Element %p: %f, prec :%p, suiv:%p\n",psElem,*((float *)psElem->tdDonnee),psElem->Elementprecedent,psElem->ElementSuivant);
             // sinon que le contenu
             (*Afficher_Contenu_element_liste_dynamique_generique)(psElem->tdDonnee);
             psElem = psElem->ElementSuivant;
@@ -1015,7 +1017,7 @@ int Enlever_elem_tete_liste_statique_generique(Liste_statique_generique * psList
     memcpy(pContenu_elem,psListe->TsListe[psListe->iTete],taille_donnee);
     // il faut maintenant libere la memoire de stockage des donnees
     free(psListe->TsListe[psListe->iTete]);
-    psListe->TsListe[psListe->iTete] = NULL ; // pas obligatoire c'est juste pour etre s�r de declencher une alerte du systeme si on tente de dereferencer
+    psListe->TsListe[psListe->iTete] = NULL ; // pas obligatoire c'est juste pour etre sûr de declencher une alerte du systeme si on tente de dereferencer
     psListe->iTete++;
     if(psListe->iTete >= psListe->iNb_elem_max)
         psListe->iTete = 0;
@@ -1121,7 +1123,7 @@ int test_liste_statique_generique_vide(Liste_statique_generique * psListe) {
  * \fn int Taille_liste_statique_generique(Liste_statique_generique * psListe)
  * \brief fonction qui retourne la taille de la liste statique (nb d elements stockes)
  * \param psListe Pointeur vers la liste statique dont on veut connaitre la taille
- * \return un entier correspondant au nombre d'�l�ments et -1 si le pointeur est null
+ * \return un entier correspondant au nombre d'éléments et -1 si le pointeur est null
  */
 int Taille_liste_statique_generique(Liste_statique_generique * psListe) {
     if (psListe == NULL ) {
@@ -1137,7 +1139,7 @@ int Taille_liste_statique_generique(Liste_statique_generique * psListe) {
  * \brief fonction qui affiche la liste statique
  * \param psListe Pointeur vers la liste statique
  * \param pfAfficher_Contenu_element_liste_statique_generique Pointeur sur fonction d'affichage
- * \return un entier correspondant � -1 si le pointeur est null et 0 sinon
+ * \return un entier correspondant à -1 si le pointeur est null et 0 sinon
  */
 int Afficher_liste_statique_generique(Liste_statique_generique * psListe, void (*pfAfficher_Contenu_element_liste_statique_generique)(TypeDonneeListeGenerique psDonnee)) {
     int iBoucle;

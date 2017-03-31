@@ -38,7 +38,7 @@ typedef struct problem {
  */
 typedef struct etape {
     Coordonnee coord;
-    Liste_dynamique_generique * chemin;
+    Liste_dynamique_generique chemin;
 }Etape;
 
 
@@ -99,24 +99,54 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 *  Prototype des fonctions pour la recherche
 *
 */
-void Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique *frontiere);
-bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Etape etape_courante);
-// TODO argument probleme rajouter par rapport version de base
-// car besoin pour la vérification de la cases (validité de passage)
-// donc savoir si on doit utiliser ici evaluation (et donc passé problem en args)
-/*
-int etat_suivants(Etape etape_courante, Liste_dynamique_generique etapes_suivantes, Problem *problem);
 
-bool evaluation(Coordonnee case_courante,Problem *problem);
+/** @author : bastien enjalbert
+* \fn Etape Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique frontiere)
+* \brief trouve le chemin le plus cours pour arriver à l'arrivé
+* \param coord_arrivee Coordonnées de l'arrivé
+* \param problem pointeur vers le problème (labyrinthe, départ, arrivé, ...)
+* \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
+* \return l'étape finale qui est composée des coordonnées de l'arrivé et du chemin pour y arriver depuis le départ
+ */
+Etape Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique cases_a_traiter);
+/** @author : bastien enjalbert
+* \fn bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Coordonnee etape_courante)
+* \brief teste si la liste passé en paramètre est composé d'une coordonée ou pas
+* \param li Liste de coordonées
+* \param coord_courante les coordonnées de l'étape que l'on veut chercher
+* \return true si les coordonnées courantes sont dans la liste, false sinon
+ */
+bool Verif_Etape_Appartient_liste(Liste_dynamique_generique * li, Coordonnee coord_courante);
 
-int Compare(Coordonnee c1, Coordonnee c2);
+/** @author : bastien enjalbert
+* \fn void afficher_chemin_coordonnee(Liste_dynamique_generique *liste)
+* \brief Affiche une liste de coordonnées
+* \param liste Liste de coordonées
+ */
+void afficher_chemin_coordonnee(Liste_dynamique_generique *liste);
 
-void afficher_coordonnee(Coordonnee case_courante);
+/** @author : bastien enjalbert
+* \fn void afficher_chemin_etape(Liste_dynamique_generique *liste)
+* \brief Affiche les coordonnées d'une liste d'étape
+* \param liste Liste d'étape
+ */
+void afficher_chemin_etape(Liste_dynamique_generique *liste);
 
-void afficher_etape(Etape etape_courante);
+/** @author : bastien enjalbert
+* \fn void show_cord(Coordonnee coord)
+* \brief Affiche une coordonée unique sur la sortie std
+* \param coord les coordonnées à afficher
+ */
+void show_cord(Coordonnee coord);
 
-;
+/** @author : bastien enjalbert
+* \fn bool Compare(Coordonnee c1, Coordonnee c2)
+* \brief Compare deux coordonnées pour savoir si elles sont égales
+* \param c la première coordonnée
+* \param c la deuxième coordonnée
+* \return true si les coordonnées sont égales, false sinon
+ */
+bool Compare(Coordonnee c1, Coordonnee c2);
 
-void Parcours_Larg(Etape etape_courante, Coordonnee coord_arrivee, Problem *problem);*/
 
 #endif // ROBOT_H_INCLUDED
