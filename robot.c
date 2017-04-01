@@ -277,10 +277,10 @@ bool etape_est_le_depart(Case cas, Problem * problem) {
 
 /**
  * Permet d'afficher le chemin à la fin
- *
+ *TODO PETIT PROBLEME le départ n'est pas dans la liste à corriger
  */
 void afficher_chemin_etape(Etape *etape_finale, Problem * pb) {
- 
+
 
     // pointeur vers les étapes (et on commence par l'arrivé car on remontera le
     // chemin en utilisant les étapes précédentes)
