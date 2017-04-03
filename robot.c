@@ -49,9 +49,7 @@ bool evaluation(Case * case_courante, Problem *problem) {
 
 
 
-    if (cur_col < 0 || cur_col > problem->nb_colonne // si la case dépasse des bords
-            || cur_lin < 0 || cur_lin > problem->nb_ligne // de la carte .... ou
-            || problem->grille[cur_lin][cur_col].carac != ' ' // si la case est un mur
+    if (problem->grille[cur_lin][cur_col].carac != ' ' // si la case est un mur
             || problem->grille[cur_lin][cur_col].marque == true // si la case a été marquée
             ) {
         return false;
@@ -222,12 +220,12 @@ Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_
 
     Case * caseDepart = recuperer_case(problem, problem->depart.num_ligne, problem->depart.num_col);
     // on initialise l'étape de départ
-    Etape etapeDepart;
-    etapeDepart.precedente = NULL;
-    etapeDepart.caseGrille = caseDepart;
+    Etape * etapeDepart = malloc(sizeof(Etape));
+    etapeDepart->precedente = NULL;
+    etapeDepart->caseGrille = caseDepart;
 
     //
-    etape_a_traiter = &etapeDepart;
+    etape_a_traiter = etapeDepart;
     int i = 1;
 
 
@@ -273,15 +271,17 @@ bool etape_est_le_depart(Case cas, Problem * problem) {
 
 }
 
-
-
-/**
- * Permet d'afficher le chemin à la fin
- *TODO PETIT PROBLEME le départ n'est pas dans la liste à corriger
- */
-void afficher_chemin_etape(Etape *etape_finale, Problem * pb) {
-
-
+/** @author : bastien enjalbert
+* \fn Liste_dynamique_generique * obtenir_chemin(Etape *etape_finale, Problem *pb)
+* \brief retourne le chemin des coordonées emprunter dans le bon ordre (deb vers fin)
+* \param coord_arrivee Coordonnées de l'arrivé
+* \param problem pointeur vers le problème (labyrinthe, départ, arrivé, ...)
+* \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
+* \return l'étape finale qui est composée des coordonnées de l'arrivé et du chemin pour y arriver depuis le départ
+*/
+Liste_dynamique_generique * obtenir_chemin(Etape *etape_finale, Problem *pb) {
+    
+    
     // pointeur vers les étapes (et on commence par l'arrivé car on remontera le
     // chemin en utilisant les étapes précédentes)
     Etape temp = *etape_finale;
@@ -293,7 +293,7 @@ void afficher_chemin_etape(Etape *etape_finale, Problem * pb) {
     Creer_liste_dynamique_generique(case_dans_le_bon_ordre);
 
     // tant qu'on est pas arrivé au départ
-    while (true) {
+    while (!etape_est_le_depart(cas, pb)) {
         Coordonnee coord;
         coord.num_col = cas.coord.num_col;
         coord.num_ligne = cas.coord.num_ligne;
@@ -305,25 +305,24 @@ void afficher_chemin_etape(Etape *etape_finale, Problem * pb) {
         cas = *temp.caseGrille;
 
         Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
-
-        // TODO bidouillage ici pour simuler que le départ est présente, à corriger ...
-        if(&temp == temp.precedente) {
-            Coordonnee coord;
-            coord.num_col = cas.coord.num_col;
-            coord.num_ligne = cas.coord.num_ligne;
-
-
-            // on prend l'étape précédente
-            temp = *temp.precedente;
-            // et sa case associée
-            cas = *temp.caseGrille;
-
-            Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
-            Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &pb->depart, sizeof(Coordonnee));
-            break;
-        }
-
+ 
     }
+    
+    Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &pb->depart, sizeof(Coordonnee));
+    
+    
+    return case_dans_le_bon_ordre;
+}
+
+
+
+/**
+ * Permet d'afficher le chemin à la fin 
+ */
+void afficher_chemin_etape(Etape *etape_finale, Problem * pb) {
+
+
+    Liste_dynamique_generique * case_dans_le_bon_ordre = obtenir_chemin(etape_finale, pb);
 
     printf("Voici les coordonnées de chaque case a emprunter pour arrivé : %d\n\n", Taille_liste_dynamique_generique(case_dans_le_bon_ordre));
     while(Taille_liste_dynamique_generique(case_dans_le_bon_ordre) > 0) {
