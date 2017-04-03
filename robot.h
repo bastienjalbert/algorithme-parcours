@@ -4,6 +4,7 @@
 #include "librairie_3IL/lib_liste.h"
 #include <stdbool.h>
 #include <string.h>
+#include <unistd.h>
 
 /**
 * structure de coordonnées
@@ -14,20 +15,6 @@
 typedef struct coordonnee {
     unsigned int num_ligne,num_col;
 } Coordonnee;
-
-/**
- * Représente les cases du labyrinthe
- *      carac: le caractère de la cases
- *      coord: les coordonnées associés à la case
- *      marque: true si on est passé sur la case (on l'a traité), false sinon
- *      longueur: rechercher "heuristique" pour un A * ou autre algo plus optimisé
- */
-typedef struct case_de_grille {
-    Coordonnee coord; // coordonnée de la case
-    char carac; // le caractère associé à la case
-    bool marque; // est-on déjà passé par cette case ?
-    int longueur; // utile pour le A*
-} Case;
 
 
 /**
@@ -43,7 +30,7 @@ typedef struct problem {
     char nom[20];                   // nom du labyrinthe
     Coordonnee arrive, depart;      // coordonnee de depart et d arrivee
     int nb_ligne,nb_colonne;        // nb de ligne et de colonne du labyrinthe correspondant
-    Case ** grille;                   // carte du labyrinthe
+    char **carte;                   // carte du labyrinthe
 } Problem;
 
 /**
@@ -52,18 +39,10 @@ typedef struct problem {
 *      precedente: étape précédente utile pour refaire le chemin
 */
 typedef struct etape {
-    Case * caseGrille;
+    Coordonnee coord;
     struct etape * precedente; // case précédente associée à celle-ci
 }Etape;
 
-
-/** @author: bastien enjalbert
-* \fn Case * recuperer_case(Problem *pb, int ligne, int colonne)
-* \brief Retourne la case de la grille du problème aux coordonnées données
-* \param pb le problème (qui contient la grille de toutes les cases)
-* \param ligne, colonne, les coordonnées de la case qu'on veut récupérer
-*/
-Case * recuperer_case(Problem *pb, int ligne, int colonne);
 
 /** @author: bastien enjalbert
 * \fn void Ajouter_case_voisines(Liste_dynamique_generique * li, Etape * etape_courante, Problem * pb)
@@ -82,7 +61,7 @@ void Ajouter_case_voisines(Liste_dynamique_generique * li, Etape * etape_courant
 * \param etape_courante l'étape courante
 * \param probleme le problème (qui contient la grille de toutes les cases et touticuinti)
 */
-void etat_suivants(Etape * etape_a_traiter, Liste_dynamique_generique *traitement, Problem *probleme);
+void etat_suivants(Etape * etape_a_traiter, Liste_dynamique_generique *traitement, Liste_dynamique_generique *marquees,Problem *probleme);
 
 /**
 * Affiche des coordonées afin de pouvoir débugguer les données
@@ -96,7 +75,7 @@ void show_cord(Coordonnee coord);
 * - On marque la case dans la grille
 * @return true si elle est visitable, false sinon
 */
-bool evaluation(Case * case_courante,Problem *problem);
+bool evaluation(Etape * case_courante,Problem *problem);
 
 
 /**
@@ -155,7 +134,7 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 * \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
 * \return l'étape tout fraichement créée
 */
-Etape creer_etape(Case * caseGrille, Etape * precedente);
+Etape creer_etape(int num_ligne, int num_col, Etape * precedente);
 
 /** @author : bastien enjalbert
 * \fn Etape Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique frontiere)
@@ -165,7 +144,7 @@ Etape creer_etape(Case * caseGrille, Etape * precedente);
 * \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
 * \return l'étape finale avec laquelle on pourra remonter aux étapes précédentes pour former le chemin
 */
-Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_a_traiter, Liste_dynamique_generique * traitement);
+Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_a_traiter, Liste_dynamique_generique * traitement, Liste_dynamique_generique * marquees);
 
 
 /** @author : bastien enjalbert
@@ -175,7 +154,7 @@ Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_
 * \param cas la case à tester
 * \return true si c'est l'arrivé, false sinon
 */
-bool etape_est_le_depart(Case cas, Problem * problem);
+//bool etape_est_le_depart(Case cas, Problem * problem);
 
 /** @author : bastien enjalbert
 * \fn void afficher_chemin_etape(Etape *etape)

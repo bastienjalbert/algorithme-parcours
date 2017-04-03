@@ -27,9 +27,13 @@ int main() {
         Liste_dynamique_generique * traitement = malloc(sizeof(Liste_dynamique_generique));
         Creer_liste_dynamique_generique(traitement);
 
+        // on initialise la liste des cases sur lesquelles nous sommes déjà passé
+        Liste_dynamique_generique * marquees = malloc(sizeof(Liste_dynamique_generique));
+        Creer_liste_dynamique_generique(marquees);
+
         // on lance notre algorithme de parcours en largeur
         Etape * etapeFinale;
-        etapeFinale = Parcours_Larg(probleme.arrive, &probleme, initialisation, traitement);
+        etapeFinale = Parcours_Larg(probleme.arrive, &probleme, initialisation, traitement, marquees);
         afficher_chemin_etape(etapeFinale, &probleme);
         libere_matrice(&probleme);
         }
