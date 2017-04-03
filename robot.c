@@ -31,12 +31,12 @@ bool Compare(Coordonnee c1, Coordonnee c2) {
 
 bool case_marquee(Etape *a_verifier, Liste_dynamique_generique *marquees)
 {
-  Etape etape_a_tester;
+  Coordonnee coord_a_tester;
   for (int i = 1; i <= Taille_liste_dynamique_generique(marquees); i++) {
 
-      Recuperer_elem_ieme_liste_dynamique_generique(marquees, &etape_a_tester, i, sizeof (Etape));
-      if (etape_a_tester.coord.num_ligne == a_verifier->coord.num_ligne
-        && etape_a_tester.coord.num_col == a_verifier->coord.num_col) {
+      Recuperer_elem_ieme_liste_dynamique_generique(marquees, &coord_a_tester, i, sizeof (Coordonnee));
+      if (coord_a_tester.num_ligne == a_verifier->coord.num_ligne
+        && coord_a_tester.num_col == a_verifier->coord.num_col) {
         return true;
       }
   }
@@ -119,9 +119,9 @@ void etat_suivants(Etape * etape_a_traiter, Liste_dynamique_generique *traitemen
 
       if(evaluation(&prochaine_etape,probleme) && !case_marquee(&prochaine_etape, marquees)) // si on n'est pas déjà passé par cette case
       {
-         // On ajoute l'étape aux étapes marquées
-         Ajouter_elem_fin_liste_dynamique_generique(marquees, &prochaine_etape, sizeof (Coordonnee));
-
+         // On ajoute la case de l'étape aux cases marquées
+         Ajouter_elem_fin_liste_dynamique_generique(marquees, &prochaine_etape.coord, sizeof (Coordonnee));
+         //printf("Etape suivante : ligne --> %d colonne --> %d\n", prochaine_etape.coord.num_ligne, prochaine_etape.coord.num_col);
          Ajouter_elem_fin_liste_dynamique_generique(traitement, &prochaine_etape, sizeof(Etape));
       }
     }
@@ -144,8 +144,7 @@ Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_
     Etape etapeDepart = creer_etape(problem->depart.num_ligne, problem->depart.num_col, NULL);
     Ajouter_elem_tete_liste_dynamique_generique(marquees, &etapeDepart, sizeof(Etape));
     etape_a_traiter = &etapeDepart;
-    int i = 1;
-
+    int i = 0;
 
     // l'étape courante n'est pas l'arrivé alors on continue le parcours
     while (!(etape_a_traiter->coord.num_col == coord_arrivee.num_col &&
@@ -155,6 +154,9 @@ Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_
         // traiter les cases voisines pour continuer l'algo
         etat_suivants(etape_a_traiter, traitement, marquees, problem);
 
+        // attention la taille de traimtent varie en fonction du nombre de case voisines visitables !
+        if (i < Taille_liste_dynamique_generique(traitement))
+            i++;
 
         // on récupére l'etape à traiter (première de la liste (LIFO))
         // on enlève pas les autres étapes car on en aura besoin pour reconstituer
@@ -162,101 +164,68 @@ Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_
         Recuperer_pointeur_elem_ieme_liste_dynamique_generique(traitement, &etape_a_traiter, i);
 
         // DEBUG
-        printf("Etape suivante : ligne --> %d colonne --> %d\n", etape_a_traiter->coord.num_col, etape_a_traiter->coord.num_ligne);
-
-        // attention la taille de traimtent varie en fonction du nombre de case voisines visitables !
-        if (i < Taille_liste_dynamique_generique(traitement))
-            i++;
-
+        //printf("Etape suivante : ligne --> %d colonne --> %d\n", etape_a_traiter->coord.num_ligne, etape_a_traiter->coord.num_col);
     }
 
     printf("Vous êtes bien arrivé !");
-
     return etape_a_traiter;
 
 }
-
-/** @author : bastien enjalbert
-* \fn bool etape_est_le_depart(Case cas, Problem * problem)
-* \brief Détermine si la case passée en param est l'arrivé ou pas
-* \param problem pointeur vers le problème (labyrinthe, départ, arrivé, ...)
-* \param cas la case à tester
-* \return true si c'est l'arrivé, false sinon
-*/
-// bool etape_est_le_depart(Case cas, Problem * problem) {
-//
-//     if (cas.coord.num_ligne == problem->depart.num_ligne
-//             && cas.coord.num_col == problem->depart.num_col) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-//
-// }
-
-
 
 /**
  * Permet d'afficher le chemin à la fin
  *TODO PETIT PROBLEME le départ n'est pas dans la liste à corriger
  */
  void afficher_chemin_etape(Etape *etape_finale, Problem * pb) {
-//
-//
-//     // pointeur vers les étapes (et on commence par l'arrivé car on remontera le
-//     // chemin en utilisant les étapes précédentes)
-//     Etape temp = *etape_finale;
-//     // case associé à l'étape
-//     Case cas = *temp.caseGrille;
-//
-//     // on a besoin des coordonées dans l'ordre inverse car on commence par l'arrivé...
-//     Liste_dynamique_generique * case_dans_le_bon_ordre = malloc(sizeof(Liste_dynamique_generique));
-//     Creer_liste_dynamique_generique(case_dans_le_bon_ordre);
-//
-//     // tant qu'on est pas arrivé au départ
-//     while (true) {
-//         Coordonnee coord;
-//         coord.num_col = cas.coord.num_col;
-//         coord.num_ligne = cas.coord.num_ligne;
-//
-//
-//         // on prend l'étape précédente
-//         temp = *temp.precedente;
-//         // et sa case associée
-//         cas = *temp.caseGrille;
-//
-//         Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
-//
-//         // TODO bidouillage ici pour simuler que le départ est présente, à corriger ...
-//         if(&temp == temp.precedente) {
-//             Coordonnee coord;
-//             coord.num_col = cas.coord.num_col;
-//             coord.num_ligne = cas.coord.num_ligne;
-//
-//
-//             // on prend l'étape précédente
-//             temp = *temp.precedente;
-//             // et sa case associée
-//             cas = *temp.caseGrille;
-//
-//             Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
-//             Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &pb->depart, sizeof(Coordonnee));
-//             break;
-//         }
-//
-//     }
-//
-//     printf("Voici les coordonnées de chaque case a emprunter pour arrivé : %d\n\n", Taille_liste_dynamique_generique(case_dans_le_bon_ordre));
-//     while(Taille_liste_dynamique_generique(case_dans_le_bon_ordre) > 0) {
-//         Coordonnee coord;
-//
-//         Enlever_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
-//
-//         printf("Coordonnées| LIGNE : %d ::: COLONNE : %d\n", coord.num_ligne, coord.num_col);
-//     }
-//
-//     free(case_dans_le_bon_ordre);
-//
+
+    // pointeur vers les étapes (et on commence par l'arrivé car on remontera le
+    // chemin en utilisant les étapes précédentes)
+    Etape temp = *etape_finale;
+
+    // on a besoin des coordonées dans l'ordre inverse car on commence par l'arrivé...
+    Liste_dynamique_generique * case_dans_le_bon_ordre = malloc(sizeof(Liste_dynamique_generique));
+    Creer_liste_dynamique_generique(case_dans_le_bon_ordre);
+
+    // tant qu'on est pas arrivé au départ
+    while (true) {
+        Coordonnee coord;
+        coord.num_col = temp.coord.num_col;
+        coord.num_ligne = temp.coord.num_ligne;
+
+
+        // on prend l'étape précédente
+        temp = *temp.precedente;
+
+        Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
+
+        // TODO bidouillage ici pour simuler que le départ est présente, à corriger ...
+        if(&temp == temp.precedente) {
+            Coordonnee coord;
+            coord.num_col = temp.coord.num_col;
+            coord.num_ligne = temp.coord.num_ligne;
+
+
+            // on prend l'étape précédente
+            temp = *temp.precedente;
+
+            Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
+            Ajouter_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &pb->depart, sizeof(Coordonnee));
+            break;
+        }
+
+    }
+
+    printf("Voici les coordonnées de chaque case a emprunter pour arriver : %d\n\n", Taille_liste_dynamique_generique(case_dans_le_bon_ordre));
+    while(Taille_liste_dynamique_generique(case_dans_le_bon_ordre) > 0) {
+        Coordonnee coord;
+
+        Enlever_elem_tete_liste_dynamique_generique(case_dans_le_bon_ordre, &coord, sizeof(Coordonnee));
+
+        printf("Coordonnées| LIGNE : %d ::: COLONNE : %d\n", coord.num_ligne, coord.num_col);
+    }
+
+    free(case_dans_le_bon_ordre);
+
  }
 
 void Affiche_matrice(Problem *p) {
