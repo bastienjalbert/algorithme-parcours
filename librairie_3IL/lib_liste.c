@@ -275,7 +275,7 @@ int Afficher_liste_dynamique(Liste_dynamique * psListe) {
 
 /********************* Liste dynamique generique **********************************/
 
-/**
+/** @author : bastien enjalbert
  * \fn int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonnee contenu_elem)
  * \brief fonction pour recuperer un element en fin d'une liste dynamique et retourner sa valeur
  * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
@@ -297,7 +297,7 @@ int Recuperer_elem_fin_liste_dynamique_generique(Liste_dynamique_generique * psL
 }
 
 
-/** @author: groupe
+/** @author : bastien enjalbert
  * \fn int Recuperer_elem_tete_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique pContenu_elem)
  * \brief fonction pour recuperer un element en tete d'une liste dynamique et retourner sa valeur
  * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
@@ -357,6 +357,50 @@ int Recuperer_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * ps
 
     return 0;
 }
+
+/** @author : bastien enjalbert
+TODO : cause un warning par rapport à l'utilisation d'un double pointeur, trouver une solution
+ * \fn Element_liste_dynamique_generique * Recuperer_pointeur_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, int iPlace_enleve, int taille_donnee)
+ * \brief fonction pour recuperer un pointeur vers l'element en ieme position d'une liste dynamique
+ * \param psListe Pointeur vers une liste dynamique dans laquelle on va enlever un element
+ * \param pointeur Le nouveau pointeur qui pointera vers la donnée que l'on veut (double pointeur pour éviter le déréférencement
+ * \param iPlace_enleve place d ajout de l element    remarque : 1 <= iPlace_enleve <= iTaille
+ * \return un entier correspondant a 1 si il y a probleme de pointeurs (pointeur null), 2 si la liste est vide, , 3 si le numero de la place n existe pas et 0 sinon
+ */
+int Recuperer_pointeur_elem_ieme_liste_dynamique_generique(Liste_dynamique_generique * psListe, TypeDonneeListeGenerique * pointeur, int iPlace_enleve){
+    int iCompteur_element = 1;
+    if (psListe == NULL) {
+        printf("erreur adresse liste ou contenu NULL");
+        return 1;
+    }
+    if (psListe->iTaille <= 0) {
+        printf("\n erreur impossible liste vide");
+        return 2;
+    }
+    if(iPlace_enleve > psListe->iTaille || iPlace_enleve <= 0){
+        printf("\n erreur place inexistante dans la liste");
+        return 3;
+    }
+    if(iPlace_enleve == 1 ){
+        *pointeur = psListe->psTete->tdDonnee;
+        return 0;
+    }
+    if(iPlace_enleve == psListe->iTaille){
+        *pointeur = psListe->psFin->tdDonnee;
+        return 0;
+    }
+    // recherche de l element en i eme position actuellement
+    Element_liste_dynamique_generique * psElem_i_eme = psListe->psTete;
+    while(iCompteur_element<iPlace_enleve){
+        psElem_i_eme = psElem_i_eme->ElementSuivant;
+        iCompteur_element++;
+    }
+    *pointeur = psElem_i_eme->tdDonnee;
+
+    return 0;
+}
+
+
 
 /** @author : bastien enjalbert
  * \fn int Dupliquer_liste_dynamique_generique (Liste_dynamique_generique * psListe)
