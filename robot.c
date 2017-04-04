@@ -12,6 +12,38 @@ void show_cord(Coordonnee coord) {
 
 }
 
+// int distance_manhattan(Coordonnee coord1, Coordonnee coord2)
+// {
+//   return ((coord1.num_ligne > coord2.num_ligne) ? (coord1.num_ligne - coord2.num_ligne) : (coord2.num_ligne - coord1.num_ligne))
+//    + ((coord1.num_col > coord2.num_col) ? (coord1.num_col - coord2.num_col) : (coord2.num_col - coord1.num_col));
+// }
+//
+// /*
+//  * Tri par sélection
+//  */
+// void tri_liste_generique(Liste_dynamique_generique *a_trier) {
+//   int max;
+//   Etape etape1;
+//   Etape etape2;
+//   /* Tri du tableau par sélection directe du maximum. */
+//   for (int i = 1; i < Taille_liste_dynamique_generique(a_trier); i++)
+//       {
+//        Recuperer_elem_ieme_liste_dynamique_generique(a_trier, &etape1, i, sizeof(Etape));
+//        max=i;
+//        for (int j = i + 1; j <= Taille_liste_dynamique_generique(a_trier); j++)
+//        {
+//           Recuperer_elem_ieme_liste_dynamique_generique(a_trier, &etape2, i, sizeof(Etape));
+//           if (etape2.caseGrille.cout > etape1.caseGrille.cout)
+//               max=j;
+//        }
+//        // On swap nos étapes
+//        Enlever_elem_ieme_liste_dynamique_generique(a_trier, &etape1, sizeof(Etape), i);
+//        Enlever_elem_ieme_liste_dynamique_generique(a_trier, &etape2, sizeof(Etape), max);
+//        Ajouter_elem_ieme_liste_dynamique_generique(a_trier, &etape2, sizeof(Etape), i);
+//        Ajouter_elem_ieme_liste_dynamique_generique(a_trier, &etape1, sizeof(Etape), max);
+//       }
+// }
+
 /** @author : bastien enjalbert
  * \fn bool Compare(Coordonnee c1, Coordonnee c2)
  * \brief Compare deux coordonnées pour savoir si elles sont égales
