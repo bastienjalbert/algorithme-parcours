@@ -9,7 +9,7 @@ int main() {
     //augmentation de la taille de la console
     //system("mode con cols=120 lines=80");
     FILE* file;
-    file = fopen("maps/map2.txt", "r" );
+    file = fopen("maps/map.txt", "r" );
     if(file == NULL) {
         printf("\n Erreur ouverture fichier\n");
         }

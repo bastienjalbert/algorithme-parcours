@@ -16,6 +16,16 @@ typedef struct coordonnee {
     unsigned int num_ligne,num_col;
 } Coordonnee;
 
+/**
+ * Représente les cases du labyrinthe
+ *      coord: les coordonnées associés à la case
+ *      longueur: rechercher "heuristique" pour un A * ou autre algo plus optimisé
+ */
+typedef struct case_de_grille {
+    Coordonnee coord; // coordonnée de la case
+    char carac; // le caractère associé à la case
+    int longueur; // utile pour le A*
+} Case;
 
 /**
 * permet de représenter une carte
@@ -30,28 +40,20 @@ typedef struct problem {
     char nom[20];                   // nom du labyrinthe
     Coordonnee arrive, depart;      // coordonnee de depart et d arrivee
     int nb_ligne,nb_colonne;        // nb de ligne et de colonne du labyrinthe correspondant
-    char **carte;                   // carte du labyrinthe
+    Case ** grille; // carte du labyrinthe
 } Problem;
+
 
 /**
 * permet de définir une etape de la recherche
-*      caseGrille: La case de la grille sur laquelle on est à l'étape x
+*      case: La case de la grille sur laquelle on est à l'étape x
 *      precedente: étape précédente utile pour refaire le chemin
 */
 typedef struct etape {
-    Coordonnee coord;
+    Case *caseGrille;
     struct etape * precedente; // case précédente associée à celle-ci
 }Etape;
 
-
-/** @author: bastien enjalbert
-* \fn void Ajouter_case_voisines(Liste_dynamique_generique * li, Etape * etape_courante, Problem * pb)
-* \brief Créé une liste des cases voisines visitables
-* \param pb le problème (qui contient la grille de toutes les cases)
-* \param li la liste qui sera retournée
-* \param etape_courante l'étape courante
-*/
-void Ajouter_case_voisines(Liste_dynamique_generique * li, Etape * etape_courante, Problem * pb);
 
 /** @author: bastien enjalbert
 * \fn void etat_suivants(Etape * etape_a_traiter, Liste_dynamique_generique *traitement, Problem *probleme)
@@ -75,7 +77,7 @@ void show_cord(Coordonnee coord);
 * - On marque la case dans la grille
 * @return true si elle est visitable, false sinon
 */
-bool evaluation(Etape * case_courante,Problem *problem);
+bool evaluation(Case * case_courante, Problem *problem);
 
 
 /**
@@ -134,7 +136,7 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 * \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
 * \return l'étape tout fraichement créée
 */
-Etape creer_etape(int num_ligne, int num_col, Etape * precedente);
+Etape creer_etape(Case * caseGrille, Etape * precedente);
 
 /** @author : bastien enjalbert
 * \fn Etape Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique frontiere)
