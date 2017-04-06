@@ -2,6 +2,7 @@
 #define ROBOT_H_INCLUDED
 
 #include "librairie_3IL/lib_liste.h"
+#include "librairie_3IL/lib_saisie.h"
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
@@ -24,7 +25,6 @@ typedef struct coordonnee {
 typedef struct case_de_grille {
     Coordonnee coord; // coordonnée de la case
     char carac; // le caractère associé à la case
-    int longueur; // utile pour le A*
 } Case;
 
 /**
@@ -52,8 +52,34 @@ typedef struct problem {
 typedef struct etape {
     Case *caseGrille;
     struct etape * precedente; // case précédente associée à celle-ci
+    int cout; // utile pour le A*
+    int heuristique;
 }Etape;
 
+/** @author : Mickaël PERIES
+ * \fn bint distance_manhattan(Coordonnee coord1, Coordonnee coord2)
+ * \brief retourne la distance entre deux coordonnées
+ * \param coord1 la première coordonnée
+ * \param coord2 la deuxième coordonnée
+ * \return la valeur
+ */
+int distance_manhattan(Coordonnee coord1, Coordonnee coord2);
+
+/** @author : Mickaël PERIES
+ * \fn tri_liste_generique(Liste_dynamique_generique *a_trier)
+ * \brief Tri la liste par ordre de priorité
+ * \param a_trier liste à trier
+ */
+void tri_liste_generique(Liste_dynamique_generique *a_trier);
+
+/** @author : Mickaël PERIES
+ * \fn case_marquee(Case *a_verifier, Liste_dynamique_generique *marquees)
+ * \brief Permet de savoir si la case a déjà été marquée
+ * \param a_verifier case à vérifier
+ * \param marquees liste des cases déjà marquées
+ * \return true si la coordonnée est marquée, false sinon
+ */
+ bool case_marquee(Case *a_verifier, Liste_dynamique_generique *marquees);
 
 /** @author: bastien enjalbert
 * \fn void etat_suivants(Etape * etape_a_traiter, Liste_dynamique_generique *traitement, Problem *probleme)
@@ -106,7 +132,6 @@ void Affiche_matrice_avec_chemin(Problem *p, Liste_dynamique_generique *liste);
 
 
 
-
 /**
 * \fn void libere_matrice(Problem *p)
 * \brief permet de liberer la memoire allouee pour la carte
@@ -128,7 +153,7 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 *
 */
 
-/** @author : bastien enjalbert
+/** @author : bastien enjalbert Mickaël PERIES
 * \fn Etape creer_etape(Case * caseGrille, Etape * precedente)
 * \brief Créer une nouvelle étape à partir d'une case de la grille et d'une autre étape précédente
 * \param caseGrille pointeur vers la case de la grille
@@ -136,9 +161,9 @@ void lire_coordonnee(FILE *f, Coordonnee *c);
 * \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
 * \return l'étape tout fraichement créée
 */
-Etape creer_etape(Case * caseGrille, Etape * precedente);
+Etape creer_etape(Problem *pb, Case * caseGrille, Etape * precedente);
 
-/** @author : bastien enjalbert
+/** @author : bastien enjalbert Mickaël PERIES
 * \fn Etape Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique frontiere)
 * \brief trouve le chemin le plus cours pour arriver à l'arrivé
 * \param coord_arrivee Coordonnées de l'arrivé
@@ -148,15 +173,15 @@ Etape creer_etape(Case * caseGrille, Etape * precedente);
 */
 Etape * Parcours_Larg(Coordonnee coord_arrivee, Problem *problem, Etape * etape_a_traiter, Liste_dynamique_generique * traitement, Liste_dynamique_generique * marquees);
 
-
-/** @author : bastien enjalbert
-* \fn bool etape_est_le_depart(Case cas, Problem * problem)
-* \brief Détermine si la case passée en param est l'arrivé ou pas
+/** @author : Mickaël PERIES
+* \fn Etape Parcours_aStar(Coordonnee coord_arrivee, Problem *problem, Liste_dynamique_generique frontiere)
+* \brief trouve le chemin le plus cours pour arriver à l'arrivé
+* \param coord_arrivee Coordonnées de l'arrivé
 * \param problem pointeur vers le problème (labyrinthe, départ, arrivé, ...)
-* \param cas la case à tester
-* \return true si c'est l'arrivé, false sinon
+* \param cases_a_traiter la liste des cases utilisée pour le traitement de l'algo
+* \return l'étape finale qui est composée des coordonnées de l'arrivé et du chemin pour y arriver depuis le départ
 */
-//bool etape_est_le_depart(Case cas, Problem * problem);
+Etape * Parcours_aStar(Coordonnee coord_arrivee, Problem *problem, Etape * etape_a_traiter, Liste_dynamique_generique * traitement, Liste_dynamique_generique * marquees);
 
 /** @author : bastien enjalbert
 * \fn void afficher_chemin_etape(Etape *etape)
